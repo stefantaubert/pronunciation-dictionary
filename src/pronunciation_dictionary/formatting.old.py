@@ -3,11 +3,11 @@ from logging import getLogger
 from pathlib import Path
 from typing import Optional
 
-from pronunciation_dict_parser.app.common import \
+from pronunciation_dictionary.app.common import \
     add_default_input_formatting_arguments
-from pronunciation_dict_parser.app.helper import save_dictionary_as_txt
-from pronunciation_dict_parser.core.parser import parse_dictionary_from_txt
-from pronunciation_dict_parser.core.types import Symbol
+from pronunciation_dictionary.app.helper import save_dictionary_as_txt
+from pronunciation_dictionary.core.parser import parse_dictionary_from_txt
+from pronunciation_dictionary.core.types import Symbol
 
 
 def get_formatting_parser(parser: ArgumentParser):

@@ -4,10 +4,10 @@ from logging import getLogger
 from multiprocessing.pool import Pool
 from pathlib import Path
 from typing import Literal
-from pronunciation_dict_parser import PronunciationDict, Symbol
+from pronunciation_dictionary.types import PronunciationDict, Symbol
 from ordered_set import OrderedSet
-from pronunciation_dict_creation.argparse_helper import parse_existing_file, parse_float_0_to_1, parse_path
-from pronunciation_dict_creation.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, add_chunksize_argument, merge_pronunciations, try_load_dict, try_save_dict
+from pronunciation_dictionary.argparse_helper import parse_existing_file, parse_float_0_to_1, parse_path
+from pronunciation_dictionary.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, add_chunksize_argument, merge_pronunciations, try_load_dict, try_save_dict
 
 from tempfile import gettempdir
 from argparse import ArgumentParser
@@ -17,10 +17,10 @@ from tqdm import tqdm
 from functools import partial
 from multiprocessing.pool import Pool
 from typing import Optional, Tuple
-from pronunciation_dict_parser import PronunciationDict, Symbol, Word, Pronunciations
+from pronunciation_dictionary import PronunciationDict, Symbol, Word, Pronunciations
 from ordered_set import OrderedSet
-from pronunciation_dict_creation.argparse_helper import get_optional, parse_existing_file, parse_path
-from pronunciation_dict_creation.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, PROG_ENCODING, add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, try_save_dict
+from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_path
+from pronunciation_dictionary.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, PROG_ENCODING, add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, try_save_dict
 
 
 def get_words_remove_symbols_parser(parser: ArgumentParser):
@@ -121,7 +121,6 @@ def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio
       changed_counter += 1
 
   return removed_words, changed_counter
-
 
 
 def process_get_word(word: Word, symbols: str, mode: Literal["all", "start", "end", "both"]) -> Tuple[Word, Optional[Word]]:

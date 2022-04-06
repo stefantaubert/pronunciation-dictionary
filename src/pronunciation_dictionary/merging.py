@@ -2,11 +2,10 @@ from argparse import ArgumentParser
 from logging import getLogger
 from pathlib import Path
 from typing import Literal, Optional
-from pronunciation_dict_parser import PronunciationDict
+from pronunciation_dictionary import PronunciationDict
 from ordered_set import OrderedSet
-from pronunciation_dict_creation.argparse_helper import get_optional, parse_existing_file, parse_float_0_to_1, parse_path
-from pronunciation_dict_creation.common import ConvertToOrderedSetAction, PROG_ENCODING, merge_pronunciations, try_save_dict
-from pronunciation_dict_parser import parse_dictionary_from_txt
+from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_float_0_to_1, parse_path
+from pronunciation_dictionary.common import ConvertToOrderedSetAction, PROG_ENCODING, merge_pronunciations, try_load_dict, try_save_dict
 
 
 def get_merging_parser(parser: ArgumentParser):
@@ -36,9 +35,8 @@ def merge_dictionary_files(dictionaries: OrderedSet[Path], output_dictionary: Pa
   resulting_dictionary = None
 
   for dictionary in dictionaries:
-    try:
-      dictionary_instance = parse_dictionary_from_txt(dictionaries[0], PROG_ENCODING)
-    except Exception as ex:
+    dictionary_instance = try_load_dict(dictionaries[0])
+    if dictionary_instance is None:
       logger.error(f"Dictionary '{dictionary}' couldn't be read.")
       return False
     if resulting_dictionary is None:

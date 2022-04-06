@@ -15,6 +15,7 @@ pytest = "*"
 
 [packages]
 ordered-set = "*"
+tqdm = "*"
 
 [requires]
 python_version = "3.8"

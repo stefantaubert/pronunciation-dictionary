@@ -1,17 +1,17 @@
-from pronunciation_dict_parser import convert_weights_to_probabilities
+from pronunciation_dictionary.api import convert_weights_to_probabilities
 from collections import OrderedDict
 from logging import getLogger
 from pathlib import Path
-from pronunciation_dict_parser import PronunciationDict
-from pronunciation_dict_parser import Symbol
+from pronunciation_dictionary.types import PronunciationDict
+from pronunciation_dictionary.types import Symbol
 import argparse
 from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from dataclasses import dataclass
 from typing import List, Literal, Optional, Set, Tuple
-from pronunciation_dict_parser import PronunciationDict, Symbol, Word, Pronunciations, get_dict_from_file, LineParsingOptions, MultiprocessingOptions
+from pronunciation_dictionary.api import PronunciationDict, Symbol, Word, Pronunciations, get_dict_from_file, LineParsingOptions, MultiprocessingOptions
 from ordered_set import OrderedSet
-from pronunciation_dict_creation.argparse_helper import get_optional, parse_codec, parse_positive_integer
+from pronunciation_dictionary.argparse_helper import get_optional, parse_codec, parse_positive_integer
 
 
 DEFAULT_ENCODING = "UTF-8"
