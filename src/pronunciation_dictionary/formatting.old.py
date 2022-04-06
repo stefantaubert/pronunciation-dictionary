@@ -31,6 +31,28 @@ def get_formatting_parser(parser: ArgumentParser):
                       help="custom output encoding", default=None)
   parser.add_argument("-o", "--overwrite", action="store_true",
                       help="overwrite file if it exists")
+                      
+                      
+  add_encoding_argument(parser, "--encoding", "encoding of the dictionaries")
+  parser.add_argument("-cc", "--consider-comments", action="store_true",
+                      help="consider line comments while deserialization")
+  parser.add_argument("-cn", "--consider-numbers", action="store_true",
+                      help="remove word numbers used to separate different pronunciations")
+  parser.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
+                      help="remove comments in pronunciations")
+  parser.add_argument("-cw", "--consider-weights", action="store_true",
+                      help="parse weights while deserialization")
+
+  parser.add_argument("--parts-sep", type=parse_non_empty,
+                      help="symbol to separate word/weight/pronunciation in a line", choices=["\t", " ", "  "], default=PROG_WORD_SEP)
+
+  parser.add_argument("-an", "--append-numbers", action="store_true",
+                      help="append numbers for words with same pronunciations")
+
+  parser.add_argument("-iw", "--include-weights", action="store_true",
+                      help="append numbers for words with same pronunciations")
+
+
   return app_adjust_formatting
 
 

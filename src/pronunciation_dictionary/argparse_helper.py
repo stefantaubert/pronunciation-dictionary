@@ -1,14 +1,36 @@
 import argparse
 import codecs
 from argparse import ArgumentParser, ArgumentTypeError
-from collections import OrderedDict
 from functools import partial
+from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Callable, List, Optional, TypeVar
 
 from ordered_set import OrderedSet
 
+from pronunciation_dictionary.globals import DEFAULT_CHUNKSIZE, DEFAULT_ENCODING, DEFAULT_MAXTASKSPERCHILD, DEFAULT_N_JOBS
+
 T = TypeVar("T")
+
+
+def add_encoding_argument(parser: ArgumentParser, variable: str, help_str: str) -> None:
+  parser.add_argument(variable, type=parse_codec, metavar='CODEC',
+                      help=help_str + "; see all available codecs at https://docs.python.org/3.8/library/codecs.html#standard-encodings", default=DEFAULT_ENCODING)
+
+
+def add_n_jobs_argument(parser: ArgumentParser) -> None:
+  parser.add_argument("-j", "--n-jobs", metavar='N', type=int,
+                      choices=range(1, cpu_count() + 1), default=DEFAULT_N_JOBS, help="amount of parallel cpu jobs")
+
+
+def add_chunksize_argument(parser: ArgumentParser, target: str = "words", default: int = DEFAULT_CHUNKSIZE) -> None:
+  parser.add_argument("-c", "--chunksize", type=parse_positive_integer, metavar="NUMBER",
+                      help=f"amount of {target} to chunk into one job", default=default)
+
+
+def add_maxtaskperchild_argument(parser: ArgumentParser) -> None:
+  parser.add_argument("-m", "--maxtasksperchild", type=get_optional(parse_positive_integer), metavar="NUMBER",
+                      help="amount of tasks per child", default=DEFAULT_MAXTASKSPERCHILD)
 
 
 class ConvertToOrderedSetAction(argparse._StoreAction):

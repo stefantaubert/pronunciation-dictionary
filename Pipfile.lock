@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c38856ba9459a4155af127f244b932e8a2f7e052f63b056aea888ce4761b2b6d"
+            "sha256": "42fa726c5cdf88c9826342c7447077f6e4a7e53df02a2b3eee0f172d8ca745c0"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.8"
+            "python_version": "3.9"
         },
         "sources": [
             {
@@ -140,10 +140,6 @@
             "index": "pypi",
             "version": "==5.10.1"
         },
-        "iterable-serialization": {
-            "editable": true,
-            "path": "."
-        },
         "lazy-object-proxy": {
             "hashes": [
                 "sha256:043651b6cb706eee4f91854da4a089816a6606c1428fd391573ef8cb642ae4f7",
@@ -194,6 +190,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==0.7.0"
+        },
+        "ordered-set": {
+            "hashes": [
+                "sha256:046e1132c71fcf3330438a539928932caf51ddbc582496833e23de611de14562",
+                "sha256:694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8"
+            ],
+            "index": "pypi",
+            "version": "==4.1.0"
         },
         "orderedmultidict": {
             "hashes": [
@@ -379,7 +383,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "tomlkit": {
@@ -389,6 +393,14 @@
             ],
             "markers": "python_version >= '3.6' and python_version < '4.0'",
             "version": "==0.10.1"
+        },
+        "tqdm": {
+            "hashes": [
+                "sha256:40be55d30e200777a307a7585aee69e4eabb46b4ec6a4b4a5f2d9f11e7d5408d",
+                "sha256:74a2cdefe14d11442cedf3ba4e21a3b84ff9a2dbdc6cfae2c34addb2a14a5ea6"
+            ],
+            "index": "pypi",
+            "version": "==4.64.0"
         },
         "typing-extensions": {
             "hashes": [

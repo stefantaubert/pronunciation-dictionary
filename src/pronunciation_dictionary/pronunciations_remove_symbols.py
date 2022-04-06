@@ -6,8 +6,7 @@ from multiprocessing.pool import Pool
 from pathlib import Path
 from tempfile import gettempdir
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import parse_existing_file
-from pronunciation_dictionary.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, PROG_ENCODING, add_chunksize_argument, try_load_dict, try_save_dict
+from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, parse_existing_file
 
 from argparse import ArgumentParser
 from logging import getLogger
@@ -16,10 +15,11 @@ from tqdm import tqdm
 from functools import partial
 from multiprocessing.pool import Pool
 from typing import Optional, Set, Tuple
+from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
+from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.types import PronunciationDict, Symbol, Word, Pronunciations
 from ordered_set import OrderedSet
 from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_non_empty_or_whitespace, parse_path
-from pronunciation_dictionary.common import ConvertToOrderedSetAction, DEFAULT_PUNCTUATION, PROG_ENCODING, add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, try_save_dict
 
 
 DEFAULT_EMPTY_WEIGHT = 1

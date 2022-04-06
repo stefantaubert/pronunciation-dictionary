@@ -4,8 +4,10 @@ from pathlib import Path
 from typing import Literal, Optional
 from pronunciation_dictionary import PronunciationDict
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_float_0_to_1, parse_path
-from pronunciation_dictionary.common import ConvertToOrderedSetAction, PROG_ENCODING, merge_pronunciations, try_load_dict, try_save_dict
+from pronunciation_dictionary.argparse_helper import add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, get_optional, parse_existing_file, parse_float_0_to_1, parse_path
+from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction
+from pronunciation_dictionary.common import merge_pronunciations
+from pronunciation_dictionary.io import try_load_dict, try_save_dict,
 
 
 def get_merging_parser(parser: ArgumentParser):
@@ -18,10 +20,13 @@ def get_merging_parser(parser: ArgumentParser):
                       choices=["add", "extend", "replace"], help="sets how existing pronunciations should be handled: add = add missing pronunciations; extend = add missing pronunciations and extend existing ones; replace: add missing pronunciations and replace existing ones.", default="add")
   parser.add_argument("--ratio", type=get_optional(parse_float_0_to_1),
                       help="merge pronunciations weights with these ratio, i.e., existing weights * ratio + weights to merge * (1-ratio); only relevant on 'extend'", default=0.5)
+  add_n_jobs_argument(parser)
+  add_chunksize_argument(parser)
+  add_maxtaskperchild_argument(parser)
   return merge_dictionary_files
 
 
-def merge_dictionary_files(dictionaries: OrderedSet[Path], output_dictionary: Path, duplicate_handling: Literal["add", "extend", "replace"], ratio: Optional[float]) -> bool:
+def merge_dictionary_files(dictionaries: OrderedSet[Path], output_dictionary: Path, duplicate_handling: Literal["add", "extend", "replace"], ratio: Optional[float], n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> bool:
   assert len(dictionaries) > 0
   logger = getLogger(__name__)
   if len(dictionaries) == 1:
