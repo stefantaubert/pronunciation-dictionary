@@ -3,9 +3,12 @@ import argparse
 import logging
 from argparse import ArgumentParser
 from logging import getLogger
-from typing import Callable, Dict, Generator, List, Tuple
+from typing import Callable, Generator, List, Tuple
+from pronunciation_dictionary.formatting_adjustment import get_formatting_parser
 from pronunciation_dictionary.merging import get_merging_parser
+from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set_extraction_parser
 from pronunciation_dictionary.pronunciations_remove_symbols import get_pronunciations_remove_symbols_parser
+from pronunciation_dictionary.vocabular_extraction import get_vocabulary_extraction_parser
 from pronunciation_dictionary.words_remove_symbols import get_words_remove_symbols_parser
 
 __version__ = "0.0.1"
@@ -28,13 +31,19 @@ def _init_parser():
   main_parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
   subparsers = main_parser.add_subparsers(help="description")
 
-  methods: Dict[str, Tuple[Parsers, str]] = (
-    ("merge", "merge dictionaries",
+  methods: Parsers = (
+    ("export-vocabulary", "export vocabulary from dictionaries",
+     get_vocabulary_extraction_parser),
+    ("export-phonemes", "export phoneme set from dictionaries",
+     get_phoneme_set_extraction_parser),
+    ("merge", "merge dictionaries into one",
      get_merging_parser),
-    ("remove-symbols-from-pronunciations", "remove symbols from pronunciations",
+    ("remove-symbols-from-pronunciations", "remove phonemes/symbols from pronunciations",
      get_pronunciations_remove_symbols_parser),
-    ("remove-symbols-from-words", "remove symbols from words",
+    ("remove-symbols-from-words", "remove characters/symbols from words",
      get_words_remove_symbols_parser),
+    ("change-formatting", "change formatting of dictionaries",
+     get_formatting_parser),
   )
 
   for command, description, method in methods:

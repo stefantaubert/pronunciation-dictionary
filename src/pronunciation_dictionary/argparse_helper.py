@@ -12,28 +12,57 @@ from pronunciation_dictionary.globals import DEFAULT_CHUNKSIZE, DEFAULT_ENCODING
 
 T = TypeVar("T")
 
+
 def add_mp_group(parser: ArgumentParser) -> None:
   mp_group = parser.add_argument_group('multiprocessing arguments')
   add_n_jobs_argument(mp_group)
   add_chunksize_argument(mp_group)
   add_maxtaskperchild_argument(mp_group)
 
-def add_io_group(parser: ArgumentParser) -> None:
-  io_group = parser.add_argument_group('I/O arguments')
-  add_encoding_argument(io_group, "--encoding", "encoding of the dictionaries")
-  io_group.add_argument("-cc", "--consider-comments", action="store_true",
-                        help="consider line comments while deserialization")
-  io_group.add_argument("-cn", "--consider-numbers", action="store_true",
-                        help="consider word numbers used to separate different pronunciations")
-  io_group.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
-                        help="consider comments in pronunciations")
-  io_group.add_argument("-cw", "--consider-weights", action="store_true",
-                        help="consider weights")
-  io_group.add_argument("-ps", "--parts-sep", type=parse_non_empty,
-                        help="symbol to separate word/weight/pronunciation in a line in serialization", choices=["TAB", "SPACE", "DOUBLE-SPACE"], default="DOUBLE-SPACE")
 
-def add_encoding_argument(parser: ArgumentParser, variable: str, help_str: str) -> None:
-  parser.add_argument("-e", variable, type=parse_codec, metavar='CODEC',
+def add_io_group(parser: ArgumentParser) -> None:
+  """ use this for modification of dictionary content """
+  group = parser.add_argument_group('I/O arguments used for serialization/deserialization')
+  add_encoding_argument(group, "-e", "--encoding",
+                        "encoding used for serialization/deserialization")
+  group.add_argument("-cc", "--consider-comments", action="store_true",
+                     help="consider line comments while deserialization")
+  group.add_argument("-cn", "--consider-numbers", action="store_true",
+                     help="consider word numbers used to separate different pronunciations while serialization/deserialization")
+  group.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
+                     help="consider comments in pronunciations while deserialization")
+  group.add_argument("-cw", "--consider-weights", action="store_true",
+                     help="consider weights while serialization/deserialization")
+  group.add_argument("-ps", "--parts-sep", type=parse_non_empty,
+                     help="symbol to separate word/weight/pronunciation in a line while serialization", choices=["TAB", "SPACE", "DOUBLE-SPACE"], default="DOUBLE-SPACE")
+
+
+def add_serialization_group(parser: ArgumentParser) -> None:
+  group = parser.add_argument_group('serialization arguments')
+  add_encoding_argument(group, "-se", "--serialization-encoding", "encoding")
+  group.add_argument("-ps", "--parts-sep", type=parse_non_empty,
+                     help="symbol to separate word/weight/pronunciation in a line", choices=["TAB", "SPACE", "DOUBLE-SPACE"], default="DOUBLE-SPACE")
+  group.add_argument("-in", "--include-numbers", action="store_true",
+                     help="include word numbers")
+  group.add_argument("-iw", "--include-weights", action="store_true",
+                     help="include weights")
+
+
+def add_deserialization_group(parser: ArgumentParser) -> None:
+  group = parser.add_argument_group('deserialization arguments')
+  add_encoding_argument(group, "-de", "--deserialization-encoding", "encoding")
+  group.add_argument("-cc", "--consider-comments", action="store_true",
+                     help="consider line comments while deserialization")
+  group.add_argument("-cn", "--consider-numbers", action="store_true",
+                     help="consider word numbers used to separate different pronunciations")
+  group.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
+                     help="consider comments in pronunciations")
+  group.add_argument("-cw", "--consider-weights", action="store_true",
+                     help="consider weights")
+
+
+def add_encoding_argument(parser: ArgumentParser, short_var: str, variable: str, help_str: str) -> None:
+  parser.add_argument(short_var, variable, type=parse_codec, metavar='CODEC',
                       help=help_str + "; see all available codecs at https://docs.python.org/3.8/library/codecs.html#standard-encodings", default=DEFAULT_ENCODING)
 
 

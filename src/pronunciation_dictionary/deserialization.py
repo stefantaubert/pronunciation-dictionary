@@ -22,7 +22,7 @@ DEFAULT_WEIGHT: Weight = 1.0
 
 
 @dataclass()
-class LineParsingOptions():
+class DeserializationOptions():
   consider_comments: bool
   consider_word_nrs: bool
   consider_pronunciation_comments: bool
@@ -36,7 +36,7 @@ class MultiprocessingOptions():
   chunksize: int
 
 
-def parse_lines(lines: List[str], options: LineParsingOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
+def parse_lines(lines: List[str], options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
   assert isinstance(lines, list)
   assert isinstance(options.consider_comments, bool)
   assert isinstance(options.consider_pronunciation_comments, bool)
@@ -116,14 +116,14 @@ def __init_pool_prepare_cache_mp(lines: List[str]) -> None:
   process_lines = lines
 
 
-def process_get_pronunciation(line_i: int, options: LineParsingOptions) -> Tuple[int, Optional[Tuple[Tuple[Word, Optional[Weight], Pronunciation], List[str]]]]:
+def process_get_pronunciation(line_i: int, options: DeserializationOptions) -> Tuple[int, Optional[Tuple[Tuple[Word, Optional[Weight], Pronunciation], List[str]]]]:
   global process_lines
   assert 0 <= line_i < len(process_lines)
   line = process_lines[line_i]
   return line_i, parse_line(line, options)
 
 
-def parse_line(line: str, options: LineParsingOptions) -> Optional[Tuple[Tuple[Word, Optional[Weight], Pronunciation], List[str]]]:
+def parse_line(line: str, options: DeserializationOptions) -> Optional[Tuple[Tuple[Word, Optional[Weight], Pronunciation], List[str]]]:
   line = line.strip()
   line_is_empty = line == ""
   if line_is_empty:

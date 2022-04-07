@@ -15,7 +15,7 @@ from tqdm import tqdm
 from functools import partial
 from multiprocessing.pool import Pool
 from typing import Optional, Set, Tuple
-from pronunciation_dictionary.deserialization import LineParsingOptions, MultiprocessingOptions
+from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
@@ -52,7 +52,7 @@ def remove_symbols_from_pronunciations(ns: Namespace) -> bool:
     logger.error("An empty symbol needs to be supplied if keep_empty is true!")
     return False
 
-  lp_options = LineParsingOptions(
+  lp_options = DeserializationOptions(
       ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
   mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 

@@ -7,7 +7,7 @@ from logging import getLogger
 from multiprocessing.pool import Pool
 from pathlib import Path
 from typing import Literal, Optional, Tuple
-from pronunciation_dictionary.deserialization import LineParsingOptions, MultiprocessingOptions
+from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION, PROG_WORD_SEP
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
@@ -42,7 +42,7 @@ def remove_symbols_from_words(ns: Namespace) -> bool:
 
   symbols_str = ''.join(ns.symbols)
 
-  lp_options = LineParsingOptions(
+  lp_options = DeserializationOptions(
       ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
   mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
