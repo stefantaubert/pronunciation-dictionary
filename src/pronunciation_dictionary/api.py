@@ -8,8 +8,20 @@ from urllib.request import urlopen
 from pronunciation_dictionary.deserialization import (DeserializationOptions,
                                                       MultiprocessingOptions,
                                                       parse_lines)
-from pronunciation_dictionary.io import load_dict
+from pronunciation_dictionary.io import load_dict, save_dict
+from pronunciation_dictionary.serialization import SerializationOptions
 from pronunciation_dictionary.types import (Pronunciation, PronunciationDict)
+from pronunciation_dictionary.words_casing_adjustment import change_casing
+
+
+def save_dict_to_file(dictionary: PronunciationDict, path: Path, encoding: str, options: SerializationOptions):
+  validate_dictionary(dictionary)
+  save_dict(dictionary, path, encoding, options)
+
+
+def change_word_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> None:
+  validate_dictionary(dictionary)
+  change_casing(dictionary, mode, ratio, mp_options)
 
 
 def get_dict_from_file(path: Path, encoding: str, options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:

@@ -1,4 +1,4 @@
-from pronunciation_dictionary.argparse_helper import add_io_group, add_mp_group, parse_non_empty
+from pronunciation_dictionary.argparse_helper import add_io_group, add_mp_group
 from tempfile import gettempdir
 from tqdm import tqdm
 from argparse import ArgumentParser, Namespace
@@ -8,19 +8,21 @@ from multiprocessing.pool import Pool
 from pathlib import Path
 from typing import Literal, Optional, Tuple
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION, PROG_WORD_SEP
+from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.types import PronunciationDict, Symbol, Word
+from pronunciation_dictionary.types import PronunciationDict, Word
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_chunksize_argument, add_encoding_argument, add_maxtaskperchild_argument, add_n_jobs_argument, get_optional, parse_existing_file, parse_float_0_to_1, parse_path
+from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, get_optional, parse_existing_file, parse_float_0_to_1, parse_path
 from pronunciation_dictionary.common import merge_pronunciations
 
 
 def get_words_remove_symbols_parser(parser: ArgumentParser):
+  # TODO make it possible to include weights in output if they were not in input
   default_removed_out = Path(gettempdir()) / "removed-words.txt"
   parser.description = "Remove symbols from words. If all symbols of a word will be removed, the word will be taken out of the dictionary."
-  parser.add_argument("dictionary", metavar='dictionary', type=parse_existing_file, help="dictionary file")
+  parser.add_argument("dictionary", metavar='dictionary',
+                      type=parse_existing_file, help="dictionary file")
   parser.add_argument("-s", "--symbols", type=str, metavar='SYMBOL', nargs='+',
                       help="remove these symbols from the words", action=ConvertToOrderedSetAction, default=DEFAULT_PUNCTUATION)
   parser.add_argument("-m", "--mode", type=str, choices=["all", "start", "end", "both"],

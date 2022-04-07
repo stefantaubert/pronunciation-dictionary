@@ -9,6 +9,7 @@ from pronunciation_dictionary.merging import get_merging_parser
 from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set_extraction_parser
 from pronunciation_dictionary.pronunciations_remove_symbols import get_pronunciations_remove_symbols_parser
 from pronunciation_dictionary.single_pronunciation_selection import get_single_pronunciation_selection_parser
+from pronunciation_dictionary.subset_extraction import get_subset_extraction_parser
 from pronunciation_dictionary.vocabular_extraction import get_vocabulary_extraction_parser
 from pronunciation_dictionary.words_casing_adjustment import get_words_casing_adjustment_parser
 from pronunciation_dictionary.words_remove_symbols import get_words_remove_symbols_parser
@@ -40,6 +41,8 @@ def _init_parser():
      get_phoneme_set_extraction_parser),
     ("merge", "merge dictionaries into one",
      get_merging_parser),
+    ("extract", "extract subset of dictionary vocabulary",
+     get_subset_extraction_parser),
     ("remove-symbols-from-pronunciations", "remove phonemes/symbols from pronunciations",
      get_pronunciations_remove_symbols_parser),
     ("remove-symbols-from-words", "remove characters/symbols from words",

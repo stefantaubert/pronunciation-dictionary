@@ -45,7 +45,7 @@ def change_casing_ns(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  removed_words, changed_counter = change_casing(
+  changed_counter = change_casing(
     dictionary_instance, ns.mode, ns.ratio, mp_options)
 
   if changed_counter == 0:
@@ -61,22 +61,8 @@ def change_casing_ns(ns: Namespace) -> bool:
 
   logger.info(f"Written dictionary to: {ns.dictionary.absolute()}")
 
-  if len(removed_words) > 0:
-    logger.warning(f"{len(removed_words)} words were removed.")
-    if ns.removed_out is not None:
-      content = "\n".join(removed_words)
-      ns.removed_out.parent.mkdir(parents=True, exist_ok=True)
-      try:
-        ns.removed_out.write_text(content, "UTF-8")
-      except Exception as ex:
-        logger.error("Removed words output couldn't be created!")
-        return False
-      logger.info(f"Written removed words to: {ns.removed_out.absolute()}")
-  else:
-    logger.info("No words were removed.")
 
-
-def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> int:
   process_method = partial(
     process_change_casing,
     mode=mode,
@@ -91,7 +77,6 @@ def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_opt
     new_words_to_words = dict(tqdm(iterator, total=len(entries), unit="words"))
 
   changed_counter = 0
-  removed_words = OrderedSet()
   all_words_in_order = OrderedSet(dictionary.keys())
   for word in all_words_in_order:
     new_word = new_words_to_words[word]
@@ -105,7 +90,7 @@ def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_opt
         dictionary[new_word] = popped_pronunciations
       changed_counter += 1
 
-  return removed_words, changed_counter
+  return changed_counter
 
 
 def process_change_casing(word: Word, mode: Literal["upper", "lower"]) -> Tuple[Word, Optional[Word]]:

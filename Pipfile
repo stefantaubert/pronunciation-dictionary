@@ -12,10 +12,11 @@ isort = "*"
 pipenv-setup = "*"
 rope = "*"
 pytest = "*"
+cx-freeze = "*"
 
 [packages]
 ordered-set = "*"
 tqdm = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"

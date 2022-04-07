@@ -2,33 +2,6 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project]
-name = "pronunciation-dictionary"
-version = "1.0.0"
-description = ""
-readme = "README.md"
-requires-python = ">=3.6"
-license = {file = "LICENSE"}
-authors = [
-  {email = "stefan.taubert@posteo.de"},
-  {name = "Stefan Taubert"}
-]
-classifiers = [
-  "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent"
-]
-dependencies = [
-  "tqdm",
-  "ordered-set"
-]
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[project.urls]
-repository = "https://github.com/stefantaubert/pronunciation-dictionary.git"
-
 [tool.pytest.ini_options]
 log_cli = true
 log_level = "DEBUG"

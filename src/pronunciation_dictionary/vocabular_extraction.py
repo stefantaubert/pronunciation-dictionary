@@ -64,6 +64,7 @@ def get_vocabulary(ns: Namespace) -> bool:
   content = "\n".join(result)
   
   try:
+    ns.output.parent.mkdir(parents=True, exist_ok=True)
     cast(Path, ns.output).write_text(content, ns.encoding)
   except Exception as ex:
     logger.error("Vocabulary couldn't be saved!")
