@@ -77,7 +77,7 @@ def parse_args(args: List[str]):
 
   if INVOKE_HANDLER_VAR in params:
     invoke_handler: Callable[[ArgumentParser], None] = params.pop(INVOKE_HANDLER_VAR)
-    invoke_handler(**params)
+    invoke_handler(received_args)
   else:
     parser.print_help()
 

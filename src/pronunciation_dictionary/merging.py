@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from logging import getLogger
 from pathlib import Path
 from typing import Literal, Optional
@@ -7,7 +7,9 @@ from ordered_set import OrderedSet
 from pronunciation_dictionary.argparse_helper import add_chunksize_argument, add_maxtaskperchild_argument, add_n_jobs_argument, get_optional, parse_existing_file, parse_float_0_to_1, parse_path
 from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction
 from pronunciation_dictionary.common import merge_pronunciations
-from pronunciation_dictionary.io import try_load_dict, try_save_dict,
+from pronunciation_dictionary.deserialization import LineParsingOptions, MultiprocessingOptions
+from pronunciation_dictionary.io import try_load_dict, try_save_dict
+from pronunciation_dictionary.serialization import SerializationOptions
 
 
 def get_merging_parser(parser: ArgumentParser):
@@ -26,21 +28,28 @@ def get_merging_parser(parser: ArgumentParser):
   return merge_dictionary_files
 
 
-def merge_dictionary_files(dictionaries: OrderedSet[Path], output_dictionary: Path, duplicate_handling: Literal["add", "extend", "replace"], ratio: Optional[float], n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> bool:
-  assert len(dictionaries) > 0
+def merge_dictionary_files(ns: Namespace) -> bool:
   logger = getLogger(__name__)
-  if len(dictionaries) == 1:
+  logger.debug(ns)
+  assert len(ns.dictionaries) > 0
+  if len(ns.dictionaries) == 1:
     logger.error("Please supply more than one dictionary!")
     return False
 
-  if duplicate_handling == "extend" and ratio is None:
+  if ns.duplicate_handling == "extend" and ns.ratio is None:
     logger.error("Parameter 'ratio' is required on extending!")
     return False
 
   resulting_dictionary = None
 
-  for dictionary in dictionaries:
-    dictionary_instance = try_load_dict(dictionaries[0])
+  lp_options = LineParsingOptions(
+      ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
+  mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
+
+  s_options = SerializationOptions(ns.parts_sep, ns.consider_numbers, ns.consider_weights)
+
+  for dictionary in ns.dictionaries:
+    dictionary_instance = try_load_dict(dictionary, ns.encoding, lp_options, mp_options)
     if dictionary_instance is None:
       logger.error(f"Dictionary '{dictionary}' couldn't be read.")
       return False
@@ -48,22 +57,22 @@ def merge_dictionary_files(dictionaries: OrderedSet[Path], output_dictionary: Pa
       resulting_dictionary = dictionary_instance
       continue
 
-    if duplicate_handling == "add":
+    if ns.duplicate_handling == "add":
       dictionary_add_new(resulting_dictionary, dictionary_instance)
-    elif duplicate_handling == "replace":
+    elif ns.duplicate_handling == "replace":
       dictionary_replace(resulting_dictionary, dictionary_instance)
-    elif duplicate_handling == "extend":
-      assert ratio is not None
-      dictionary_extend(resulting_dictionary, dictionary_instance, ratio)
+    elif ns.duplicate_handling == "extend":
+      assert ns.ratio is not None
+      dictionary_extend(resulting_dictionary, dictionary_instance, ns.ratio)
     else:
       assert False
-
-  success = try_save_dict(resulting_dictionary, output_dictionary)
+      
+  success = try_save_dict(resulting_dictionary, ns.output_dictionary, ns.encoding, s_options)
   if not success:
     logger.error("Dictionary couldn't be written.")
     return False
 
-  logger.info(f"Written dictionary to: {output_dictionary.absolute()}")
+  logger.info(f"Written dictionary to: {ns.output_dictionary.absolute()}")
 
 
 def dictionary_replace(dictionary1: PronunciationDict, dictionary2: PronunciationDict) -> None:

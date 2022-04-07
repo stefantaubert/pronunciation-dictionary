@@ -1,7 +1,7 @@
-from pronunciation_dictionary.argparse_helper import parse_non_empty
+from pronunciation_dictionary.argparse_helper import add_io_group, add_mp_group, parse_non_empty
 from tempfile import gettempdir
 from tqdm import tqdm
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from functools import partial
 from logging import getLogger
 from multiprocessing.pool import Pool
@@ -20,85 +20,68 @@ from pronunciation_dictionary.common import merge_pronunciations
 def get_words_remove_symbols_parser(parser: ArgumentParser):
   default_removed_out = Path(gettempdir()) / "removed-words.txt"
   parser.description = "Remove symbols from words. If all symbols of a word will be removed, the word will be taken out of the dictionary."
-  parser.add_argument("dictionaries", metavar='dictionaries', type=parse_existing_file, nargs="+",
-                      help="dictionary files", action=ConvertToOrderedSetAction)
+  parser.add_argument("dictionary", metavar='dictionary', type=parse_existing_file, help="dictionary file")
   parser.add_argument("-s", "--symbols", type=str, metavar='SYMBOL', nargs='+',
-                      help="remove these symbols from the pronunciations", action=ConvertToOrderedSetAction, default=DEFAULT_PUNCTUATION)
+                      help="remove these symbols from the words", action=ConvertToOrderedSetAction, default=DEFAULT_PUNCTUATION)
   parser.add_argument("-m", "--mode", type=str, choices=["all", "start", "end", "both"],
                       help="mode to remove the symbols: all = on all locations; start = only from start; end = only from end; both = start + end", default="both")
   # parser.add_argument("--remove-empty", action="store_true",
   #                     help="if a pronunciation will be empty after removal, remove the corresponding word from the dictionary")
-  parser.add_argument("-ro", "--removed-out", metavar="PATH", type=get_optional(parse_path),
-                      help="write removed words to this file", default=default_removed_out)
   parser.add_argument("-r", "--ratio", type=parse_float_0_to_1,
                       help="merge pronunciations weights with these ratio, i.e., existing weights * ratio + weights to merge * (1-ratio)", default=0.5)
-
-  add_encoding_argument(parser, "--encoding", "encoding of the dictionaries")
-  parser.add_argument("-cc", "--consider-comments", action="store_true",
-                      help="consider line comments while deserialization")
-  parser.add_argument("-cn", "--consider-numbers", action="store_true",
-                      help="consider word numbers used to separate different pronunciations")
-  parser.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
-                      help="consider comments in pronunciations")
-  parser.add_argument("-cw", "--consider-weights", action="store_true",
-                      help="consider weights")
-
-  parser.add_argument("-ps", "--parts-sep", type=parse_non_empty,
-                      help="symbol to separate word/weight/pronunciation in a line in serialization", choices=["\t", " ", "  "], default=PROG_WORD_SEP)
-
-  add_n_jobs_argument(parser)
-  add_chunksize_argument(parser)
-  add_maxtaskperchild_argument(parser)
+  parser.add_argument("-ro", "--removed-out", metavar="PATH", type=get_optional(parse_path),
+                      help="write removed words to this file", default=default_removed_out)
+  add_io_group(parser)
+  add_mp_group(parser)
   return remove_symbols_from_words
 
 
-def remove_symbols_from_words(dictionaries: OrderedSet[Path], symbols: OrderedSet[Symbol], mode: str, ratio: float, removed_out: Optional[Path], consider_comments: bool, consider_numbers: bool, consider_pronunciation_comments: bool, consider_weights: bool, encoding: str, parts_sep: str, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> bool:
-  assert len(dictionaries) > 0
+def remove_symbols_from_words(ns: Namespace) -> bool:
   logger = getLogger(__name__)
+  logger.debug(ns)
 
-  symbols_str = ''.join(symbols)
+  symbols_str = ''.join(ns.symbols)
 
   lp_options = LineParsingOptions(
-      consider_comments, consider_numbers, consider_pronunciation_comments, consider_weights)
-  mp_options = MultiprocessingOptions(n_jobs, maxtasksperchild, chunksize)
+      ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
+  mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
-  s_options = SerializationOptions(parts_sep, consider_numbers, consider_weights)
+  s_options = SerializationOptions(ns.parts_sep, ns.consider_numbers, ns.consider_weights)
 
-  for dictionary_path in dictionaries:
-    dictionary_instance = try_load_dict(dictionaries[0], encoding, lp_options, mp_options)
-    if dictionary_instance is None:
-      logger.error(f"Dictionary '{dictionary_path}' couldn't be read.")
-      return False
+  dictionary_instance = try_load_dict(ns.dictionary, ns.encoding, lp_options, mp_options)
+  if dictionary_instance is None:
+    logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
+    return False
 
-    removed_words, changed_counter = remove_symbols(
-      dictionary_instance, symbols_str, mode, ratio, n_jobs, maxtasksperchild, chunksize)
+  removed_words, changed_counter = remove_symbols(
+    dictionary_instance, symbols_str, ns.mode, ns.ratio, ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
-    if changed_counter == 0:
-      logger.info("Didn't changed anything.")
-      return True
+  if changed_counter == 0:
+    logger.info("Didn't changed anything.")
+    return True
 
-    logger.info(f"Changed pronunciations of {changed_counter} word(s).")
+  logger.info(f"Changed pronunciations of {changed_counter} word(s).")
 
-    success = try_save_dict(dictionary_instance, dictionary_path, encoding, s_options)
-    if not success:
-      logger.error("Dictionary couldn't be written.")
-      return False
+  success = try_save_dict(dictionary_instance, ns.dictionary, ns.encoding, s_options)
+  if not success:
+    logger.error("Dictionary couldn't be written.")
+    return False
 
-    logger.info(f"Written dictionary to: {dictionary_path.absolute()}")
+  logger.info(f"Written dictionary to: {ns.dictionary.absolute()}")
 
-    if len(removed_words) > 0:
-      logger.warning(f"{len(removed_words)} words were removed.")
-      if removed_out is not None:
-        content = "\n".join(removed_words)
-        removed_out.parent.mkdir(parents=True, exist_ok=True)
-        try:
-          removed_out.write_text(content, "UTF-8")
-        except Exception as ex:
-          logger.error("Removed words output couldn't be created!")
-          return False
-        logger.info(f"Written removed words to: {removed_out.absolute()}")
-    else:
-      logger.info("No words were removed.")
+  if len(removed_words) > 0:
+    logger.warning(f"{len(removed_words)} words were removed.")
+    if ns.removed_out is not None:
+      content = "\n".join(removed_words)
+      ns.removed_out.parent.mkdir(parents=True, exist_ok=True)
+      try:
+        ns.removed_out.write_text(content, "UTF-8")
+      except Exception as ex:
+        logger.error("Removed words output couldn't be created!")
+        return False
+      logger.info(f"Written removed words to: {ns.removed_out.absolute()}")
+  else:
+    logger.info("No words were removed.")
 
 
 def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> Tuple[OrderedSet[Word], int]:

@@ -12,9 +12,28 @@ from pronunciation_dictionary.globals import DEFAULT_CHUNKSIZE, DEFAULT_ENCODING
 
 T = TypeVar("T")
 
+def add_mp_group(parser: ArgumentParser) -> None:
+  mp_group = parser.add_argument_group('multiprocessing arguments')
+  add_n_jobs_argument(mp_group)
+  add_chunksize_argument(mp_group)
+  add_maxtaskperchild_argument(mp_group)
+
+def add_io_group(parser: ArgumentParser) -> None:
+  io_group = parser.add_argument_group('I/O arguments')
+  add_encoding_argument(io_group, "--encoding", "encoding of the dictionaries")
+  io_group.add_argument("-cc", "--consider-comments", action="store_true",
+                        help="consider line comments while deserialization")
+  io_group.add_argument("-cn", "--consider-numbers", action="store_true",
+                        help="consider word numbers used to separate different pronunciations")
+  io_group.add_argument("-cp", "--consider-pronunciation-comments", action="store_true",
+                        help="consider comments in pronunciations")
+  io_group.add_argument("-cw", "--consider-weights", action="store_true",
+                        help="consider weights")
+  io_group.add_argument("-ps", "--parts-sep", type=parse_non_empty,
+                        help="symbol to separate word/weight/pronunciation in a line in serialization", choices=["TAB", "SPACE", "DOUBLE-SPACE"], default="DOUBLE-SPACE")
 
 def add_encoding_argument(parser: ArgumentParser, variable: str, help_str: str) -> None:
-  parser.add_argument(variable, type=parse_codec, metavar='CODEC',
+  parser.add_argument("-e", variable, type=parse_codec, metavar='CODEC',
                       help=help_str + "; see all available codecs at https://docs.python.org/3.8/library/codecs.html#standard-encodings", default=DEFAULT_ENCODING)
 
 
@@ -29,7 +48,7 @@ def add_chunksize_argument(parser: ArgumentParser, target: str = "words", defaul
 
 
 def add_maxtaskperchild_argument(parser: ArgumentParser) -> None:
-  parser.add_argument("-m", "--maxtasksperchild", type=get_optional(parse_positive_integer), metavar="NUMBER",
+  parser.add_argument("-mt", "--maxtasksperchild", type=get_optional(parse_positive_integer), metavar="NUMBER",
                       help="amount of tasks per child", default=DEFAULT_MAXTASKSPERCHILD)
 
 
