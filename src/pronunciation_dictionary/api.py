@@ -4,14 +4,12 @@ from pathlib import Path
 from typing import List
 from urllib.request import urlopen
 
-from ordered_set import OrderedSet
 
 from pronunciation_dictionary.deserialization import (DeserializationOptions,
                                                       MultiprocessingOptions,
                                                       parse_lines)
 from pronunciation_dictionary.io import load_dict
-from pronunciation_dictionary.types import (Pronunciation, PronunciationDict,
-                                            Pronunciations, Symbol, Word)
+from pronunciation_dictionary.types import (Pronunciation, PronunciationDict)
 
 
 def get_dict_from_file(path: Path, encoding: str, options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
