@@ -8,7 +8,9 @@ from pronunciation_dictionary.formatting_adjustment import get_formatting_parser
 from pronunciation_dictionary.merging import get_merging_parser
 from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set_extraction_parser
 from pronunciation_dictionary.pronunciations_remove_symbols import get_pronunciations_remove_symbols_parser
+from pronunciation_dictionary.single_pronunciation_selection import get_single_pronunciation_selection_parser
 from pronunciation_dictionary.vocabular_extraction import get_vocabulary_extraction_parser
+from pronunciation_dictionary.words_casing_adjustment import get_words_casing_adjustment_parser
 from pronunciation_dictionary.words_remove_symbols import get_words_remove_symbols_parser
 
 __version__ = "0.0.1"
@@ -44,6 +46,10 @@ def _init_parser():
      get_words_remove_symbols_parser),
     ("change-formatting", "change formatting of dictionaries",
      get_formatting_parser),
+    ("select-single-pronunciation", "select a single pronunciation by discarding all alternative ones",
+     get_single_pronunciation_selection_parser),
+    ("change-word-casing", "transform all words to upper- or lowercase",
+     get_words_casing_adjustment_parser),
   )
 
   for command, description, method in methods:

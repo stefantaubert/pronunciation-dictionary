@@ -65,7 +65,6 @@ def add_encoding_argument(parser: ArgumentParser, short_var: str, variable: str,
   parser.add_argument(short_var, variable, type=parse_codec, metavar='CODEC',
                       help=help_str + "; see all available codecs at https://docs.python.org/3.8/library/codecs.html#standard-encodings", default=DEFAULT_ENCODING)
 
-
 def add_n_jobs_argument(parser: ArgumentParser) -> None:
   parser.add_argument("-j", "--n-jobs", metavar='N', type=int,
                       choices=range(1, cpu_count() + 1), default=DEFAULT_N_JOBS, help="amount of parallel cpu jobs")
