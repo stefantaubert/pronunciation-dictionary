@@ -13,7 +13,7 @@ class SerializationOptions():
 part_separators = {
   "TAB": "\t",
   "SPACE": " ",
-  "DOUBLE-SPACe": "  ",
+  "DOUBLE-SPACE": "  ",
 }
 
 
@@ -29,7 +29,7 @@ def to_text(pronunciation_dict: PronunciationDict, options: SerializationOptions
       if options.include_weights:
         weights_part = f"{weight}{part_separator}"
       pron_part = " ".join(pronunciation)
-      line = f"{word_part}{weights_part}{pron_part}\n"
+      line = f"{word_part}{weights_part}{pron_part}"
       lines.append(line)
   dict_content = "\n".join(lines)
   return dict_content

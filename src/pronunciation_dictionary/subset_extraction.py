@@ -1,3 +1,4 @@
+from typing import Iterable, OrderedDict as ODType
 from argparse import ArgumentParser, Namespace
 from collections import OrderedDict
 from logging import getLogger
@@ -54,9 +55,17 @@ def extract_subset_ns(ns: Namespace) -> bool:
   if dictionary_instance is None:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
+  logger.info(f"Parsed dictionary containing {len(dictionary_instance)} words.")
+
+  vocabulary = OrderedSet(vocabulary_content.splitlines())
+  logger.info(f"Parsed vocabulary containing {len(vocabulary)} words.")
+  if ns.consider_case:
+    oov_voc = select_subset_dictionary_casing(dictionary_instance, vocabulary)
+  else:
+    oov_voc = select_subset_dictionary_ignore_casing(dictionary_instance, vocabulary)
 
   if len(dictionary_instance) == 0:
-    logger.warning(f"The target dictionary is empty! Skipped saving.")
+    logger.info(f"The target dictionary is empty! Skipped saving.")
   else:
     success = try_save_dict(dictionary_instance, ns.output_dictionary, ns.encoding, s_options)
     if not success:
@@ -66,15 +75,8 @@ def extract_subset_ns(ns: Namespace) -> bool:
     logger.info(
       f"Written dictionary containing {len(dictionary_instance)} words to: {ns.output_dictionary.absolute()}")
 
-  vocabulary = OrderedSet(vocabulary_content.splitlines())
-  logger.info(f"Parsed vocabulary containing {len(vocabulary)} words.")
-  if ns.consider_case:
-    oov_voc = select_subset_dictionary_casing(dictionary_instance, vocabulary)
-  else:
-    oov_voc = select_subset_dictionary_ignore_casing(dictionary_instance, vocabulary)
-
   if len(oov_voc) > 0:
-    logger.warning(f"{len(oov_voc)} word(s) were not contained in the dictionary!")
+    logger.info(f"{len(oov_voc)} word(s) were not contained in the dictionary!")
     if ns.oov_out is not None:
       oov_content = "\n".join(oov_voc)
       try:
@@ -82,8 +84,9 @@ def extract_subset_ns(ns: Namespace) -> bool:
         ns.oov_out.write_text(oov_content, "UTF-8")
       except Exception as ex:
         logger.error("OOV output couldn't be created!")
+        logger.debug(ex)
         return False
-      logger.info(f"Written OOV to: {ns.oov_out.absolute()}")
+      logger.info(f"Written OOV-words to: {ns.oov_out.absolute()}")
   else:
     logger.info("All words were contained in the target dictionary!")
 
@@ -103,37 +106,40 @@ def select_subset_dictionary_casing(dictionary: PronunciationDict, vocabulary: O
   return oov_voc
 
 
-def select_subset_dictionary_ignore_casing(dictionary: PronunciationDict, vocabulary: OrderedSet[Word]) -> OrderedSet[Word]:
-  word_map = OrderedDict()
-  for word in dictionary.keys():
+def get_mapping(words: Iterable[Word]) -> ODType[Word, OrderedSet[Word]]:
+  result: ODType[Word, OrderedSet[Word]] = OrderedDict()
+  for word in words:
     word_lower = word.lower()
-    if word_lower not in word_map:
-      word_map[word_lower] = OrderedSet((word,),)
+    if word_lower not in result:
+      result[word_lower] = OrderedSet((word,),)
     else:
-      word_map[word_lower].add(word)
+      result[word_lower].add(word)
+  return result
 
-  vocabulary_lower = OrderedSet(
-    word.lower() for word in vocabulary
-  )
 
-  existing_vocabulary = OrderedSet(word_map.keys())
+def select_subset_dictionary_ignore_casing(dictionary: PronunciationDict, vocabulary: OrderedSet[Word]) -> OrderedSet[Word]:
+  dict_word_map = get_mapping(dictionary.keys())
+  voc_word_map = get_mapping(vocabulary)
+
+  dict_vocabulary = OrderedSet(dict_word_map.keys())
+  voc_vocabulary = OrderedSet(voc_word_map.keys())
   # copy_voc = vocabulary.intersection(existing_vocabulary)
-  remove_voc = existing_vocabulary.difference(vocabulary_lower)
-  oov_voc = vocabulary_lower.difference(existing_vocabulary)
+  unused_dict_voc = dict_vocabulary.difference(voc_vocabulary)
+  oov_voc = voc_vocabulary.difference(dict_vocabulary)
 
-  remove_voc_actual = OrderedSet(
+  unused_dict_voc_actual = OrderedSet(
     word
-    for word_lower in remove_voc
-    for word in word_map[word_lower]
+    for word_lower in unused_dict_voc
+    for word in dict_word_map[word_lower]
   )
 
   oov_voc_actual = OrderedSet(
     word
     for word_lower in oov_voc
-    for word in word_map[word_lower]
+    for word in voc_word_map[word_lower]
   )
 
-  for word in remove_voc_actual:
+  for word in unused_dict_voc_actual:
     assert word in dictionary
     dictionary.pop(word)
 

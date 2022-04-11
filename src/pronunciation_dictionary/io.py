@@ -1,3 +1,4 @@
+from logging import getLogger
 from pathlib import Path
 from typing import Optional
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions, parse_lines
@@ -15,6 +16,8 @@ def try_save_dict(pronunciation_dict: PronunciationDict, path: Path, encoding: s
   try:
     save_dict(pronunciation_dict, path, encoding, options)
   except Exception as ex:
+    logger = getLogger(__name__)
+    logger.debug(ex)
     return False
   return True
 
@@ -30,5 +33,7 @@ def try_load_dict(path: Path, encoding: str, options: DeserializationOptions, mp
   try:
     result = load_dict(path, encoding, options, mp_options)
   except Exception as ex:
+    logger = getLogger(__name__)
+    logger.debug(ex)
     return None
   return result

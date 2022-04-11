@@ -6,7 +6,7 @@ from multiprocessing.pool import Pool
 from pathlib import Path
 from tempfile import gettempdir
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_chunksize_argument, add_deserialization_group, add_io_group, add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument, parse_existing_file
+from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_chunksize_argument, add_deserialization_group, add_encoding_argument, add_io_group, add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument, parse_existing_file
 
 from argparse import ArgumentParser
 from logging import getLogger
@@ -21,16 +21,16 @@ from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
 from pronunciation_dictionary.types import PronunciationDict, Symbol, Word, Pronunciations
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file,  parse_path
+from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_path
 
 
 def get_vocabulary_extraction_parser(parser: ArgumentParser):
-  default_removed_out = Path(gettempdir()) / "removed-words.txt"
-  parser.description = "Remove symbols from pronunciations."
+  parser.description = "Export vocabulary (i.e., words that are contained in the dictionaries)."
   parser.add_argument("dictionaries", metavar='dictionaries', type=parse_existing_file, nargs="+",
                       help="dictionary files", action=ConvertToOrderedSetAction)
   parser.add_argument("output", metavar="output", type=parse_path,
-                      help="output vocabulary to this file", default=default_removed_out)
+                      help="output vocabulary to this file")
+  add_encoding_argument(parser, "-e", "--output-encoding", "encoding of the vocabulary file")
   parser.add_argument("-u", "--unsorted", action="store_true",
                       help="do not sort vocabulary in output")
   add_deserialization_group(parser)
@@ -49,7 +49,8 @@ def get_vocabulary(ns: Namespace) -> bool:
 
   total_vocabulary = OrderedSet()
   for dictionary_path in ns.dictionaries:
-    dictionary_instance = try_load_dict(dictionary_path, ns.encoding, lp_options, mp_options)
+    dictionary_instance = try_load_dict(
+      dictionary_path, ns.deserialization_encoding, lp_options, mp_options)
     if dictionary_instance is None:
       logger.error(f"Dictionary '{dictionary_path}' couldn't be read.")
       return False
@@ -62,12 +63,13 @@ def get_vocabulary(ns: Namespace) -> bool:
   if sort:
     result = sorted(result)
   content = "\n".join(result)
-  
+
   try:
     ns.output.parent.mkdir(parents=True, exist_ok=True)
-    cast(Path, ns.output).write_text(content, ns.encoding)
+    cast(Path, ns.output).write_text(content, ns.output_encoding)
   except Exception as ex:
     logger.error("Vocabulary couldn't be saved!")
+    logger.debug(ex)
     return False
 
   logger.info(f"Written vocabulary containing {len(result)} words to: {ns.output.absolute()}")
