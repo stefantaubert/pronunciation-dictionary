@@ -9,7 +9,7 @@ pipenv run cxfreeze \
   -O \
   --compress \
   --target-dir=dist \
-  --bin-includes "libffi.so,types" \
+  --zip-include "/usr/lib/python3.8/typing.py" \
   --target-name=cli \
   $cli_path
 
