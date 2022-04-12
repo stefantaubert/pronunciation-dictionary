@@ -123,7 +123,7 @@ def select_subset_dictionary_ignore_casing(dictionary: PronunciationDict, vocabu
 
   dict_vocabulary = OrderedSet(dict_word_map.keys())
   voc_vocabulary = OrderedSet(voc_word_map.keys())
-  # copy_voc = vocabulary.intersection(existing_vocabulary)
+
   unused_dict_voc = dict_vocabulary.difference(voc_vocabulary)
   oov_voc = voc_vocabulary.difference(dict_vocabulary)
 

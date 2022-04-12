@@ -1,7 +1,7 @@
 import random
 from collections import OrderedDict
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from urllib.request import urlopen
 
 
@@ -76,7 +76,7 @@ def read_lines_from_url(url: str, encoding: str) -> List[str]:
   return result
 
 
-def get_weighted_pronunciation(word: str, dictionary: PronunciationDict) -> Pronunciation:
+def get_weighted_pronunciation(word: str, dictionary: PronunciationDict, seed: Optional[int]) -> Pronunciation:
   if not (isinstance(word, str)):
     raise ValueError("Parameter 'word' needs to be of type 'str'!")
   validate_dictionary(dictionary)
@@ -87,6 +87,10 @@ def get_weighted_pronunciation(word: str, dictionary: PronunciationDict) -> Pron
     raise ValueError("The dictionary is invalid!")
   if not (len(pronunciations) > 0):
     raise ValueError("The dictionary is invalid!")
+  if seed is not None and not isinstance(seed, int):
+    raise ValueError("Seed needs to be of type 'int'!")
+  if seed is not None:
+    random.seed(seed)
   result = random.choices(tuple(pronunciations.keys()), tuple(pronunciations.values()), k=1)[0]
   return result
 
