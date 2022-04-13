@@ -1,8 +1,11 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
-from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_deserialization_group, add_mp_group, add_serialization_group, parse_existing_file
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
+from pronunciation_dictionary.argparse_helper import (
+    ConvertToOrderedSetAction, add_deserialization_group, add_mp_group,
+    add_serialization_group, parse_existing_file)
+from pronunciation_dictionary.deserialization import (DeserializationOptions,
+                                                      MultiprocessingOptions)
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
 

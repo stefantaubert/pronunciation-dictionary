@@ -1,8 +1,12 @@
 from logging import getLogger
 from pathlib import Path
 from typing import Optional
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions, parse_lines
-from pronunciation_dictionary.serialization import SerializationOptions, to_text
+
+from pronunciation_dictionary.deserialization import (DeserializationOptions,
+                                                      MultiprocessingOptions,
+                                                      parse_lines)
+from pronunciation_dictionary.serialization import (SerializationOptions,
+                                                    to_text)
 from pronunciation_dictionary.types import PronunciationDict
 
 

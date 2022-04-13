@@ -5,24 +5,23 @@ from logging import getLogger
 from multiprocessing.pool import Pool
 from pathlib import Path
 from tempfile import gettempdir
-from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction, add_chunksize_argument, add_io_group, add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument, parse_existing_file
-
-from argparse import ArgumentParser
-from logging import getLogger
-from pathlib import Path
-from tqdm import tqdm
-from functools import partial
-from multiprocessing.pool import Pool
 from typing import Optional, Set, Tuple
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
+
+from ordered_set import OrderedSet
+from tqdm import tqdm
+
+from pronunciation_dictionary.argparse_helper import (
+    ConvertToOrderedSetAction, add_chunksize_argument, add_io_group,
+    add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument,
+    get_optional, parse_existing_file, parse_non_empty_or_whitespace,
+    parse_path)
+from pronunciation_dictionary.deserialization import (DeserializationOptions,
+                                                      MultiprocessingOptions)
 from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.types import PronunciationDict, Symbol, Word, Pronunciations
-from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import get_optional, parse_existing_file, parse_non_empty_or_whitespace, parse_path
-
+from pronunciation_dictionary.types import (PronunciationDict, Pronunciations,
+                                            Symbol, Word)
 
 DEFAULT_EMPTY_WEIGHT = 1
 
@@ -30,7 +29,8 @@ DEFAULT_EMPTY_WEIGHT = 1
 def get_pronunciations_remove_symbols_parser(parser: ArgumentParser):
   default_removed_out = Path(gettempdir()) / "removed-words.txt"
   parser.description = "Remove symbols from pronunciations."
-  parser.add_argument("dictionary", metavar='dictionary', type=parse_existing_file, help="dictionary file")
+  parser.add_argument("dictionary", metavar='dictionary',
+                      type=parse_existing_file, help="dictionary file")
   parser.add_argument("-s", "--symbols", type=str, metavar='SYMBOL', nargs='+',
                       help="remove these symbols from the pronunciations", action=ConvertToOrderedSetAction, default=DEFAULT_PUNCTUATION)
   parser.add_argument("-k", "--keep-empty", action="store_true",

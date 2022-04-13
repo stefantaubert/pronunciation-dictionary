@@ -2,12 +2,17 @@ from argparse import ArgumentParser, Namespace
 from logging import getLogger
 from pathlib import Path
 from typing import Literal, Optional
-from pronunciation_dictionary import PronunciationDict
+
 from ordered_set import OrderedSet
-from pronunciation_dictionary.argparse_helper import add_chunksize_argument, add_io_group, add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument, get_optional, parse_existing_file, parse_float_0_to_1, parse_path
-from pronunciation_dictionary.argparse_helper import ConvertToOrderedSetAction
+
+from pronunciation_dictionary import PronunciationDict
+from pronunciation_dictionary.argparse_helper import (
+    ConvertToOrderedSetAction, add_chunksize_argument, add_io_group,
+    add_maxtaskperchild_argument, add_mp_group, add_n_jobs_argument,
+    get_optional, parse_existing_file, parse_float_0_to_1, parse_path)
 from pronunciation_dictionary.common import merge_pronunciations
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
+from pronunciation_dictionary.deserialization import (DeserializationOptions,
+                                                      MultiprocessingOptions)
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
 
@@ -65,7 +70,7 @@ def merge_dictionary_files(ns: Namespace) -> bool:
       dictionary_extend(resulting_dictionary, dictionary_instance, ns.ratio)
     else:
       assert False
-      
+
   success = try_save_dict(resulting_dictionary, ns.output_dictionary, ns.encoding, s_options)
   if not success:
     logger.error("Dictionary couldn't be written.")

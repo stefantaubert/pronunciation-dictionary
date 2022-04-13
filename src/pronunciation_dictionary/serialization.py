@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Literal
+
 from pronunciation_dictionary.types import PronunciationDict, Symbol
 
 

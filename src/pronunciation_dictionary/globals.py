@@ -1,4 +1,5 @@
 from multiprocessing import cpu_count
+
 from ordered_set import OrderedSet
 
 DEFAULT_ENCODING = "UTF-8"

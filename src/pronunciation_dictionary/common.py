@@ -1,4 +1,5 @@
 from collections import OrderedDict
+
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations
 
 
