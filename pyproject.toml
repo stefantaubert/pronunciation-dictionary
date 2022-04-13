@@ -7,11 +7,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pronunciation-dictionary"
-version = "0.1.0"
+version = "0.1.3"
 description = "Library to load/save/modify pronunciation dictionaries."
 readme = "README.md"
 requires-python = ">=3.6"
-license = {file = "LICENSE"}
+license = {text = "MIT License"}
 authors = [
   {email = "stefan.taubert@posteo.me"},
   {name = "Stefan Taubert"}
@@ -39,7 +39,12 @@ classifiers = [
   "Operating System :: POSIX :: Linux",
   "Operating System :: Unix",
   "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
   "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
@@ -48,8 +53,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/stefantaubert/pronunciation-dictionary"
-repository = "https://github.com/stefantaubert/pronunciation-dictionary.git"
+Homepage = "https://github.com/stefantaubert/pronunciation-dictionary"
+Issues = "https://github.com/stefantaubert/pronunciation-dictionary/issues"
 
 [project.scripts]
 pronunciation-dictionary-cli = "pronunciation_dictionary.cli:run"

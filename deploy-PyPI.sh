@@ -1,5 +1,5 @@
 #!/bin/bash
-python3.8 -m build
+rm -rf dist/; python3.8 -m build -o dist/
 
 # to testpypi
 pipenv run twine upload --repository testpypi dist/*

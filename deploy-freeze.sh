@@ -1,5 +1,4 @@
 #!/bin/bash
-
 prog_name="pronunciation-dictionary-cli"
 cli_path=src/pronunciation_dictionary/cli.py
 

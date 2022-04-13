@@ -33,7 +33,7 @@ def formatter(prog):
 def _init_parser():
   main_parser = ArgumentParser(
     formatter_class=formatter,
-    description="This program provides methods to create pronunciation dictionaries.",
+    description="This program provides methods to modify pronunciation dictionaries.",
   )
   main_parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
   subparsers = main_parser.add_subparsers(help="description")
