@@ -11,12 +11,12 @@ pycodestyle = "*"
 isort = "*"
 rope = "*"
 pytest = "*"
-cx-freeze = "*"
-flake8 = "*"
 autoflake = "*"
+twine = "*"
+cx-freeze = "*"
 
 [packages]
-ordered-set = "*"
+ordered-set = ">=4.1.0"
 tqdm = "*"
 
 [requires]

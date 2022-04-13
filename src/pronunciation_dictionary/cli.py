@@ -1,5 +1,4 @@
 import argparse
-#__version__ = "0.0.2"
 import importlib.metadata
 import logging
 import sys
