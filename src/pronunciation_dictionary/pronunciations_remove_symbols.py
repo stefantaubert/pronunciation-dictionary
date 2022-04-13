@@ -10,10 +10,8 @@ from typing import Optional, Set, Tuple
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
-from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
-                                                      add_chunksize_argument, add_io_group,
-                                                      add_maxtaskperchild_argument, add_mp_group,
-                                                      add_n_jobs_argument, get_optional,
+from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
+                                                      add_mp_group, get_optional,
                                                       parse_existing_file,
                                                       parse_non_empty_or_whitespace, parse_path)
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions

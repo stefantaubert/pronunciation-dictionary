@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from pronunciation_dictionary.types import PronunciationDict, Symbol
+from pronunciation_dictionary.types import PronunciationDict
 
 
 @dataclass()

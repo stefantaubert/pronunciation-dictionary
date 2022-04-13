@@ -1,27 +1,17 @@
 from argparse import ArgumentParser, Namespace
-from collections import OrderedDict
-from functools import partial
 from logging import getLogger
-from multiprocessing.pool import Pool
 from pathlib import Path
-from tempfile import gettempdir
-from typing import Optional, Set, Tuple, cast
+from typing import cast
 
 from ordered_set import OrderedSet
-from tqdm import tqdm
 
 from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
-                                                      add_chunksize_argument,
                                                       add_deserialization_group,
-                                                      add_encoding_argument, add_io_group,
-                                                      add_maxtaskperchild_argument, add_mp_group,
-                                                      add_n_jobs_argument, get_optional,
+                                                      add_encoding_argument, add_mp_group,
                                                       parse_existing_file, parse_path)
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
-from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
+from pronunciation_dictionary.io import try_load_dict
+from pronunciation_dictionary.types import PronunciationDict, Word
 
 
 def get_vocabulary_extraction_parser(parser: ArgumentParser):

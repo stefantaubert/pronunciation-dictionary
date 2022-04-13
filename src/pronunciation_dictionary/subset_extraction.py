@@ -3,20 +3,16 @@ from collections import OrderedDict
 from logging import getLogger
 from pathlib import Path
 from tempfile import gettempdir
-from typing import Iterable, Literal, Optional
+from typing import Iterable
 from typing import OrderedDict as ODType
 from typing import cast
 
 from ordered_set import OrderedSet
 
 from pronunciation_dictionary import PronunciationDict
-from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
-                                                      add_chunksize_argument, add_encoding_argument,
-                                                      add_io_group, add_maxtaskperchild_argument,
-                                                      add_mp_group, add_n_jobs_argument,
-                                                      get_optional, parse_existing_file,
-                                                      parse_float_0_to_1, parse_path)
-from pronunciation_dictionary.common import merge_pronunciations
+from pronunciation_dictionary.argparse_helper import (add_encoding_argument, add_io_group,
+                                                      add_mp_group, get_optional,
+                                                      parse_existing_file, parse_path)
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions

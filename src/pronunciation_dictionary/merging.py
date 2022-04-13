@@ -1,15 +1,11 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
-from pathlib import Path
-from typing import Literal, Optional
 
 from ordered_set import OrderedSet
 
 from pronunciation_dictionary import PronunciationDict
-from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
-                                                      add_chunksize_argument, add_io_group,
-                                                      add_maxtaskperchild_argument, add_mp_group,
-                                                      add_n_jobs_argument, get_optional,
+from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
+                                                      add_mp_group, get_optional,
                                                       parse_existing_file, parse_float_0_to_1,
                                                       parse_path)
 from pronunciation_dictionary.common import merge_pronunciations

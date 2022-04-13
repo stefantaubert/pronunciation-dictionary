@@ -8,8 +8,7 @@ from typing import List, Optional, Tuple
 
 from tqdm import tqdm
 
-from pronunciation_dictionary.types import (Pronunciation, PronunciationDict,
-                                            Weight, Word)
+from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 
 WORD_PRON_PATTERN = re.compile(r"(\S+)\s+(.+)")
 WORD_WEIGHT_PRON_PATTERN = re.compile(r"(\S+)\s+([0-9\.]+)\s+(.+)")
