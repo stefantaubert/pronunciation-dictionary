@@ -13,8 +13,23 @@ readme = "README.md"
 requires-python = ">=3.6"
 license = {file = "LICENSE"}
 authors = [
-  {email = "stefan.taubert@posteo.de"},
+  {email = "stefan.taubert@posteo.me"},
   {name = "Stefan Taubert"}
+]
+maintainers = [
+  {email = "stefan.taubert@posteo.me"},
+  {name = "Stefan Taubert"}
+]
+keywords = [
+  "ARPAbet",
+  "IPA",
+  "X-SAMPA",
+  "CMU",
+  "TTS",
+  "Text-to-speech",
+  "Speech synthesis",
+  "Language",
+  "Linguistics"  
 ]
 classifiers = [
   "Operating System :: OS Independent",
@@ -33,6 +48,7 @@ dependencies = [
 ]
 
 [project.urls]
+homepage = "https://github.com/stefantaubert/pronunciation-dictionary"
 repository = "https://github.com/stefantaubert/pronunciation-dictionary.git"
 
 [project.scripts]
