@@ -4,7 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/pronunciation-dictionary.svg)](https://pypi.python.org/pypi/pronunciation-dictionary)
 [![MIT](https://img.shields.io/github/license/stefantaubert/pronunciation-dictionary.svg)](LICENSE)
 
-Library and CLI to load/save/modify pronunciation dictionaries.
+Library and CLI to load/save/modify pronunciation dictionaries (any language).
 
 ## Features
 
@@ -16,6 +16,12 @@ Library and CLI to load/save/modify pronunciation dictionaries.
 - Remove phonemes from pronunciations
 - Change formatting
 - Select single pronunciation per word
+
+## Roadmap
+
+- Adding tests
+- Implementation of printing of statistics
+- Implementation of phoneme mapping, e.g., mapping ARPAbet to IPA
 
 ## Example dictionaries and deserialization arguments
 
@@ -32,6 +38,21 @@ Library and CLI to load/save/modify pronunciation dictionaries.
   - `--deserialization-encoding "ISO-8859-1"`
   - `--consider-comments`
   - `--consider-numbers`
+
+### Excerpt from CMU (as example)
+
+```dict
+a.d. EY2 D IY1
+a.m. EY2 EH1 M
+a.s EY1 Z
+aaa T R IH2 P AH0 L EY1
+aaberg AA1 B ER0 G
+aachen AA1 K AH0 N
+aachener AA1 K AH0 N ER0
+aaker AA1 K ER0
+aalborg AO1 L B AO0 R G # place, danish
+aalborg(2) AA1 L B AO0 R G
+```
 
 ## Installation
 

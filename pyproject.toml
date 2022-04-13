@@ -7,11 +7,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pronunciation-dictionary"
-version = "0.1.3"
-description = "Library to load/save/modify pronunciation dictionaries."
+version = "0.1.5"
+description = "Library to load/save/modify pronunciation dictionaries (any language)."
 readme = "README.md"
 requires-python = ">=3.6"
-license = {text = "MIT License"}
+license = {text = "MIT"}
 authors = [
   {email = "stefan.taubert@posteo.me"},
   {name = "Stefan Taubert"}
@@ -32,6 +32,7 @@ keywords = [
   "Linguistics"  
 ]
 classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
   "Operating System :: OS Independent",
   "Operating System :: MacOS",
   "Operating System :: POSIX",
@@ -41,6 +42,7 @@ classifiers = [
   "Operating System :: Microsoft :: Windows",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
