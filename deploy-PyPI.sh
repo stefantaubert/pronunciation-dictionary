@@ -1,7 +1,7 @@
 #!/bin/bash
 rm -rf dist/; python3.8 -m build -o dist/
 
-# to testpypi
+# to testpypi (version 0.1.5)
 pipenv run twine upload --repository testpypi dist/*
 # https://test.pypi.org/project/pronunciation-dictionary/
 
