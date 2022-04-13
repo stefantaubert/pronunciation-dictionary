@@ -1,6 +1,46 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = [
+  "setuptools >= 40.9.0",
+  "wheel",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pronunciation-dictionary"
+version = "0.1.0"
+description = "Library to load/save/modify pronunciation dictionaries."
+readme = "README.md"
+requires-python = ">=3.6"
+license = {file = "LICENSE"}
+authors = [
+  {email = "stefan.taubert@posteo.de"},
+  {name = "Stefan Taubert"}
+]
+classifiers = [
+  "Operating System :: OS Independent",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX",
+  "Operating System :: POSIX :: BSD",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: Unix",
+  "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+  "tqdm",
+  "ordered-set"
+]
+
+[project.urls]
+repository = "https://github.com/stefantaubert/pronunciation-dictionary.git"
+
+[project.scripts]
+pronunciation-dictionary-cli = "pronunciation_dictionary.cli:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
 
 [tool.pytest.ini_options]
 log_cli = true
@@ -8,10 +48,16 @@ log_level = "DEBUG"
 testpaths = [
   "src/pronunciation_dictionary_tests",
 ]
-# slows down debugging
-#addopts=-n8
 
 [tool.autopep8]
 indent-size = 2
 ignore = ["E121"]
 max_line_length = 100
+
+[tool.isort]
+line_length = 100
+indent = 2
+known_first_party = [
+  "pronunciation_dictionary"
+]
+known_third_party = ["ordered_set", "tqdm"]

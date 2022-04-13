@@ -8,10 +8,8 @@ from typing import Callable, List, Optional, TypeVar
 
 from ordered_set import OrderedSet
 
-from pronunciation_dictionary.globals import (DEFAULT_CHUNKSIZE,
-                                              DEFAULT_ENCODING,
-                                              DEFAULT_MAXTASKSPERCHILD,
-                                              DEFAULT_N_JOBS)
+from pronunciation_dictionary.globals import (DEFAULT_CHUNKSIZE, DEFAULT_ENCODING,
+                                              DEFAULT_MAXTASKSPERCHILD, DEFAULT_N_JOBS)
 
 T = TypeVar("T")
 

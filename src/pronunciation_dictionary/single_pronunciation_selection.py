@@ -12,20 +12,20 @@ from ordered_set import OrderedSet
 from tqdm import tqdm
 
 from pronunciation_dictionary.api import get_first_pronunciation
-from pronunciation_dictionary.argparse_helper import (
-    ConvertToOrderedSetAction, add_chunksize_argument, add_encoding_argument,
-    add_io_group, add_maxtaskperchild_argument, add_mp_group,
-    add_n_jobs_argument, get_optional, parse_existing_file, parse_float_0_to_1,
-    parse_non_empty, parse_non_negative_integer, parse_optional_value,
-    parse_path)
+from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
+                                                      add_chunksize_argument, add_encoding_argument,
+                                                      add_io_group, add_maxtaskperchild_argument,
+                                                      add_mp_group, add_n_jobs_argument,
+                                                      get_optional, parse_existing_file,
+                                                      parse_float_0_to_1, parse_non_empty,
+                                                      parse_non_negative_integer,
+                                                      parse_optional_value, parse_path)
 from pronunciation_dictionary.common import merge_pronunciations
-from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      MultiprocessingOptions)
+from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION, PROG_WORD_SEP
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.types import (PronunciationDict, Pronunciations,
-                                            Symbol, Word)
+from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
 
 
 def get_single_pronunciation_selection_parser(parser: ArgumentParser):
@@ -46,7 +46,7 @@ def remove_multiple_pronunciations_ns(ns: Namespace) -> bool:
   logger.debug(ns)
 
   lp_options = DeserializationOptions(
-      ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
+    ns.consider_comments, ns.consider_numbers, ns.consider_pronunciation_comments, ns.consider_weights)
   mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
   s_options = SerializationOptions(ns.parts_sep, ns.consider_numbers, ns.consider_weights)

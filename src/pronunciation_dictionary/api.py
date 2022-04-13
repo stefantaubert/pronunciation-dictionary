@@ -5,8 +5,7 @@ from typing import List, Optional
 from urllib.request import urlopen
 
 from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      MultiprocessingOptions,
-                                                      parse_lines)
+                                                      MultiprocessingOptions, parse_lines)
 from pronunciation_dictionary.io import load_dict, save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict

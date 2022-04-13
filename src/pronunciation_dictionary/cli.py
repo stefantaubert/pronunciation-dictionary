@@ -1,32 +1,25 @@
 import argparse
+#__version__ = "0.0.2"
+import importlib.metadata
 import logging
 import sys
 from argparse import ArgumentParser
 from logging import getLogger
 from typing import Callable, Generator, List, Tuple
 
-import pkg_resources
-
-from pronunciation_dictionary.formatting_adjustment import \
-    get_formatting_parser
+from pronunciation_dictionary.formatting_adjustment import get_formatting_parser
 from pronunciation_dictionary.merging import get_merging_parser
-from pronunciation_dictionary.phoneme_set_extraction import \
-    get_phoneme_set_extraction_parser
+from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set_extraction_parser
 from pronunciation_dictionary.pronunciations_remove_symbols import \
-    get_pronunciations_remove_symbols_parser
+  get_pronunciations_remove_symbols_parser
 from pronunciation_dictionary.single_pronunciation_selection import \
-    get_single_pronunciation_selection_parser
-from pronunciation_dictionary.subset_extraction import \
-    get_subset_extraction_parser
-from pronunciation_dictionary.vocabular_extraction import \
-    get_vocabulary_extraction_parser
-from pronunciation_dictionary.words_casing_adjustment import \
-    get_words_casing_adjustment_parser
-from pronunciation_dictionary.words_remove_symbols import \
-    get_words_remove_symbols_parser
+  get_single_pronunciation_selection_parser
+from pronunciation_dictionary.subset_extraction import get_subset_extraction_parser
+from pronunciation_dictionary.vocabular_extraction import get_vocabulary_extraction_parser
+from pronunciation_dictionary.words_casing_adjustment import get_words_casing_adjustment_parser
+from pronunciation_dictionary.words_remove_symbols import get_words_remove_symbols_parser
 
-__version__ = "0.0.1"
-# print(pkg_resources.get_distribution('pronunciation-dictionary').version)
+__version__ = importlib.metadata.version("pronunciation-dictionary")
 
 INVOKE_HANDLER_VAR = "invoke_handler"
 
@@ -112,6 +105,10 @@ def parse_args(args: List[str]):
     parser.print_help()
 
 
-if __name__ == "__main__":
+def run():
   arguments = sys.argv[1:]
   parse_args(arguments)
+
+
+if __name__ == "__main__":
+  run()

@@ -12,6 +12,8 @@ isort = "*"
 rope = "*"
 pytest = "*"
 cx-freeze = "*"
+flake8 = "*"
+autoflake = "*"
 
 [packages]
 ordered-set = "*"

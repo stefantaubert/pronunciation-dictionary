@@ -10,18 +10,17 @@ from typing import Optional, Set, Tuple, cast
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
-from pronunciation_dictionary.argparse_helper import (
-    ConvertToOrderedSetAction, add_chunksize_argument,
-    add_deserialization_group, add_io_group, add_maxtaskperchild_argument,
-    add_mp_group, add_n_jobs_argument, get_optional, parse_existing_file,
-    parse_path)
-from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      MultiprocessingOptions)
+from pronunciation_dictionary.argparse_helper import (ConvertToOrderedSetAction,
+                                                      add_chunksize_argument,
+                                                      add_deserialization_group, add_io_group,
+                                                      add_maxtaskperchild_argument, add_mp_group,
+                                                      add_n_jobs_argument, get_optional,
+                                                      parse_existing_file, parse_path)
+from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.globals import DEFAULT_PUNCTUATION
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.types import (PronunciationDict, Pronunciations,
-                                            Symbol, Word)
+from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
 
 
 def get_phoneme_set_extraction_parser(parser: ArgumentParser):
