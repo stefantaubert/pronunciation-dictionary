@@ -8,17 +8,28 @@ from tqdm import tqdm
 from pronunciation_dictionary.common import merge_pronunciations
 from pronunciation_dictionary.deserialization import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict, Word
-from pronunciation_dictionary.validation import validate_dictionary
+from pronunciation_dictionary.validation import _validate_dictionary
+
+
+def __validate_mode(mode: str) -> Optional[str]:
+  if mode not in ["lower", "upper"]:
+    return "Invalid value!"
 
 
 def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> int:
-  if mode not in ["lower", "upper"]:
-    raise ValueError("Parameter 'mode': Invalid value!")
-  if msg := validate_dictionary(dictionary):
+  if msg := __validate_mode(mode):
+    raise ValueError(f"Parameter 'mode': {msg}")
+  if msg := _validate_dictionary(dictionary):
     raise ValueError(f"Parameter 'dictionary': {msg}")
+  _change_casing(dictionary, mode, ratio, mp_options)
+
+
+def _change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> int:
+  assert __validate_mode(mode) is None
+  assert _validate_dictionary(dictionary) is None
 
   process_method = partial(
-    process_change_casing,
+    __process_change_casing,
     mode=mode,
   )
 
@@ -46,7 +57,7 @@ def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_opt
   return changed_counter
 
 
-def process_change_casing(word: Word, mode: Literal["upper", "lower"]) -> Tuple[Word, Optional[Word]]:
+def __process_change_casing(word: Word, mode: Literal["upper", "lower"]) -> Tuple[Word, Optional[Word]]:
   if mode == "upper":
     new_word = word.upper()
   elif mode == "lower":

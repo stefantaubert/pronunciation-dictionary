@@ -18,7 +18,7 @@ class InternalError(ValidationError):
     return "Internal error!"
 
 
-def validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
+def _validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
   if not (isinstance(dictionary, OrderedDict)):
     return "Type needs to be 'OrderedDict'!"
   if len(dictionary) > 0:

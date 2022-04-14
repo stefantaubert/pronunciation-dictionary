@@ -4,7 +4,7 @@ from logging import getLogger
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.words_casing_adjustment import change_casing
+from pronunciation_dictionary.words_casing_adjustment import _change_casing
 from pronunciation_dictionary_cli.argparse_helper import (add_io_group, add_mp_group,
                                                           parse_existing_file, parse_float_0_to_1)
 
@@ -37,7 +37,7 @@ def change_casing_ns(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  changed_counter = change_casing(
+  changed_counter = _change_casing(
     dictionary_instance, ns.mode, ns.ratio, mp_options)
 
   if changed_counter == 0:
