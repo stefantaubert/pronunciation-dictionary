@@ -1,0 +1,1 @@
+from pronunciation_dictionary.api import validate_dictionary

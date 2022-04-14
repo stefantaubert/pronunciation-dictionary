@@ -1,5 +1,6 @@
 playground*
 dist-freeze/
+deploy-*
 *debug
 .vscode/
 

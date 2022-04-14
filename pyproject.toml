@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pronunciation-dictionary"
-version = "0.0.1"
+version = "0.0.2"
 description = "Library to load/save/modify pronunciation dictionaries (any language)."
 readme = "README.md"
 requires-python = ">=3.6"
@@ -58,12 +58,16 @@ dependencies = [
 Homepage = "https://github.com/stefantaubert/pronunciation-dictionary"
 Issues = "https://github.com/stefantaubert/pronunciation-dictionary/issues"
 
-[project.scripts]
-pronunciation-dictionary-cli = "pronunciation_dictionary.cli:run"
+[tool.setuptools.package-dir]
+pronunciation_dictionary = "src/pronunciation_dictionary"
+pronunciation_dictionary_cli = "src/pronunciation_dictionary_cli"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-namespaces = false
+[project.scripts]
+pronunciation-dictionary-cli = "pronunciation_dictionary_cli.cli:run"
+
+# [tool.setuptools.packages.find]
+# where = ["src"]
+# namespaces = false
 
 [tool.pytest.ini_options]
 log_cli = true
@@ -81,6 +85,7 @@ max_line_length = 100
 line_length = 100
 indent = 2
 known_first_party = [
-  "pronunciation_dictionary"
+  "pronunciation_dictionary",
+  "pronunciation_dictionary_cli"
 ]
 known_third_party = ["ordered_set", "tqdm"]
