@@ -5,11 +5,11 @@ from typing import Literal, Optional, Tuple
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
-from pronunciation_dictionary.common import merge_pronunciations
+from pronunciation_dictionary.common import MultiprocessingOptions, merge_pronunciations
 from pronunciation_dictionary.types import PronunciationDict, Word
 
 
-def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> Tuple[OrderedSet[Word], int]:
+def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
   process_method = partial(
     process_get_word,
     symbols=symbols,
@@ -17,11 +17,11 @@ def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio
   )
 
   with Pool(
-    processes=n_jobs,
-    maxtasksperchild=maxtasksperchild,
+    processes=mp_options.n_jobs,
+    maxtasksperchild=mp_options.maxtasksperchild,
   ) as pool:
     entries = OrderedSet(dictionary.keys())
-    iterator = pool.imap(process_method, entries, chunksize)
+    iterator = pool.imap(process_method, entries, mp_options.chunksize)
     new_words_to_words = dict(tqdm(iterator, total=len(entries), unit="words"))
 
   changed_counter = 0

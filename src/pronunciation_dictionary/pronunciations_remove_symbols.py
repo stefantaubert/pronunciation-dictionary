@@ -6,25 +6,26 @@ from typing import Optional, Set, Tuple
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
+from pronunciation_dictionary.common import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
 
 DEFAULT_EMPTY_WEIGHT = 1
 
 
-def remove_symbols(dictionary: PronunciationDict, symbols: OrderedSet[Symbol], keep_empty: bool, empty_symbol: Optional[Symbol], n_jobs: int, maxtasksperchild: Optional[int], chunksize: int) -> Tuple[OrderedSet[Word], int]:
+def remove_symbols(dictionary: PronunciationDict, symbols: OrderedSet[Symbol], keep_empty: bool, empty_symbol: Optional[Symbol], mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
   process_method = partial(
     process_get_pronunciation,
     symbols=symbols,
   )
 
   with Pool(
-    processes=n_jobs,
+    processes=mp_options.n_jobs,
     initializer=__init_pool_prepare_cache_mp,
     initargs=(dictionary,),
-    maxtasksperchild=maxtasksperchild,
+    maxtasksperchild=mp_options.maxtasksperchild,
   ) as pool:
     entries = OrderedSet(dictionary.keys())
-    iterator = pool.imap(process_method, entries, chunksize)
+    iterator = pool.imap(process_method, entries, mp_options.chunksize)
     pronunciations_to_i = list(tqdm(iterator, total=len(entries), unit="words"))
 
   changed_counter = 0

@@ -8,6 +8,7 @@ from typing import List, Optional, Tuple
 
 from tqdm import tqdm
 
+from pronunciation_dictionary.common import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 
 WORD_PRON_PATTERN = re.compile(r"(\S+)\s+(.+)")
@@ -28,13 +29,6 @@ class DeserializationOptions():
   consider_weights: bool
 
 
-@dataclass()
-class MultiprocessingOptions():
-  n_jobs: int
-  maxtasksperchild: Optional[int]
-  chunksize: int
-
-
 def parse_lines(lines: List[str], options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
   assert isinstance(lines, list)
   assert isinstance(options.consider_comments, bool)
@@ -49,10 +43,9 @@ def parse_lines(lines: List[str], options: DeserializationOptions, mp_options: M
   assert mp_options.n_jobs > 0
 
   logger = getLogger(__name__)
-  pronunciation_dict: PronunciationDict = OrderedDict()
 
   if len(lines) == 0:
-    return pronunciation_dict
+    return OrderedDict()
 
   process_method = partial(
     process_get_pronunciation,
@@ -69,6 +62,7 @@ def parse_lines(lines: List[str], options: DeserializationOptions, mp_options: M
     iterator = pool.imap(process_method, entries, mp_options.chunksize)
     result = dict(tqdm(iterator, total=len(entries), unit="lines"))
 
+  pronunciation_dict: PronunciationDict = OrderedDict()
   for line_i in range(len(lines)):
     line_nr = line_i + 1
     assert line_i in result

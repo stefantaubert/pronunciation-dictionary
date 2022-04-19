@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from dataclasses import dataclass
+from typing import Optional
 
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations
 
@@ -46,3 +48,9 @@ def convert_weights_to_probabilities(pronunciations: Pronunciations) -> None:
 #       pronunciations1[pronunciation2] += weight2
 #     else:
 #       pronunciations1[pronunciations2] = weight2
+
+@dataclass()
+class MultiprocessingOptions():
+  n_jobs: int
+  maxtasksperchild: Optional[int]
+  chunksize: int
