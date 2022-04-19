@@ -6,15 +6,12 @@ from typing import cast
 
 from ordered_set import OrderedSet
 
-from pronunciation_dictionary import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
-
-from pronunciation_dictionary import SerializationOptions
-from pronunciation_dictionary import select_subset_dictionary
-from pronunciation_dictionary import Word
+from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
+                                      SerializationOptions, select_subset_dictionary)
 from pronunciation_dictionary_cli.argparse_helper import (add_encoding_argument, add_io_group,
                                                           add_mp_group, get_optional,
                                                           parse_existing_file, parse_path)
+from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
 
 
 def get_subset_extraction_parser(parser: ArgumentParser):
