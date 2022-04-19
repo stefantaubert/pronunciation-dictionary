@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pronunciation-dictionary"
-version = "0.0.2"
+version = "0.0.3"
 description = "Library to load/save/modify pronunciation dictionaries (any language)."
 readme = "README.md"
 requires-python = ">=3.6"
