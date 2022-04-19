@@ -3,7 +3,7 @@ from logging import getLogger
 
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.merging import merge_dictionary_files
+from pronunciation_dictionary.merging import merge_dictionaries
 from pronunciation_dictionary.serialization import SerializationOptions
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
                                                           add_mp_group, get_optional,
@@ -55,7 +55,7 @@ def merge_dictionary_files_ns(ns: Namespace) -> bool:
       resulting_dictionary = dictionary_instance
       continue
 
-    merge_dictionary_files(resulting_dictionary, dictionary_instance,
+    merge_dictionaries(resulting_dictionary, dictionary_instance,
                            ns.duplicate_handling, ns.ratio)
 
   success = try_save_dict(resulting_dictionary, ns.output_dictionary, ns.encoding, s_options)

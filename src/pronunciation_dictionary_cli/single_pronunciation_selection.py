@@ -4,7 +4,7 @@ from logging import getLogger
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
 from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.single_pronunciation_selection import remove_extra_pronunciations
+from pronunciation_dictionary.single_pronunciation_selection import select_single_pronunciation
 from pronunciation_dictionary_cli.argparse_helper import (add_io_group, add_mp_group, get_optional,
                                                           parse_existing_file,
                                                           parse_non_negative_integer)
@@ -38,7 +38,7 @@ def remove_multiple_pronunciations_ns(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  changed_counter = remove_extra_pronunciations(
+  changed_counter = select_single_pronunciation(
     dictionary_instance, ns.mode, ns.seed, mp_options)
 
   if changed_counter == 0:

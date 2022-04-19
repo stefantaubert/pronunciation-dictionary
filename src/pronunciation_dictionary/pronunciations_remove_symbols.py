@@ -1,18 +1,34 @@
 from collections import OrderedDict
 from functools import partial
 from multiprocessing.pool import Pool
-from typing import Optional, Set, Tuple
+from typing import Any, Optional, Set, Tuple, Type
 
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
 from pronunciation_dictionary.common import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
+from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
+                                                 validate_type)
 
 DEFAULT_EMPTY_WEIGHT = 1
 
 
-def remove_symbols(dictionary: PronunciationDict, symbols: OrderedSet[Symbol], keep_empty: bool, empty_symbol: Optional[Symbol], mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+def remove_symbols_from_pronunciations(dictionary: PronunciationDict, symbols: OrderedSet[Symbol], keep_empty: bool, empty_symbol: Optional[Symbol], mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := validate_type(symbols, OrderedSet):
+    raise ValueError(f"Parameter 'symbols': {msg}")
+  if msg := validate_type(keep_empty, bool):
+    raise ValueError(f"Parameter 'keep_empty': {msg}")
+  if empty_symbol is not None and (msg := validate_type(empty_symbol, str)):
+    raise ValueError(f"Parameter 'empty_symbol': {msg}")
+  if msg := validate_mp_options(mp_options):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
+
+  if len(symbols) == 0:
+    return OrderedSet(), 0
+
   process_method = partial(
     process_get_pronunciation,
     symbols=symbols,
@@ -62,6 +78,13 @@ def process_get_pronunciation(word: Word, symbols: Set[Symbol]) -> Tuple[Word, O
   global process_lookup_dict
   assert word in process_lookup_dict
   pronunciations = process_lookup_dict[word]
+  new_pronunciations = remove_symbols_from_pronunciations_entry(pronunciations, symbols)
+  if new_pronunciations == pronunciations:
+    return word, None
+  return word, new_pronunciations
+
+
+def remove_symbols_from_pronunciations_entry(pronunciations: Pronunciations, symbols: Set[Symbol]) -> Pronunciations:
   new_pronunciations = OrderedDict()
   changed_anything = False
   for pronunciation, weight in pronunciations.items():
@@ -80,5 +103,5 @@ def process_get_pronunciation(word: Word, symbols: Set[Symbol]) -> Tuple[Word, O
       changed_anything = True
 
   if changed_anything:
-    return word, new_pronunciations
-  return word, None
+    return new_pronunciations
+  return pronunciations

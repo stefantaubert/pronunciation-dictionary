@@ -1,18 +1,38 @@
 from collections import OrderedDict
-from typing import Iterable
+from typing import Iterable, Optional
 from typing import OrderedDict as ODType
 
 from ordered_set import OrderedSet
 
 from pronunciation_dictionary import PronunciationDict
 from pronunciation_dictionary.types import Word
+from pronunciation_dictionary.validation import validate_dictionary
 
 
-def select_subset_dictionary(dictionary_instance: PronunciationDict, vocabulary: OrderedSet[Word], consider_case: bool) -> OrderedSet[Word]:
+def validate_vocabulary(vocabulary: OrderedSet[Word]) -> Optional[str]:
+  if not isinstance(vocabulary, OrderedSet):
+    return "Type needs to be 'OrderedSet'!"
+  return None
+
+
+def validate_consider_case(consider_case: bool) -> Optional[str]:
+  if not isinstance(consider_case, bool):
+    return "Type needs to be 'bool'!"
+  return None
+
+
+def select_subset_dictionary(dictionary: PronunciationDict, vocabulary: OrderedSet[Word], consider_case: bool) -> OrderedSet[Word]:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := validate_vocabulary(dictionary):
+    raise ValueError(f"Parameter 'vocabulary': {msg}")
+  if msg := validate_consider_case(dictionary):
+    raise ValueError(f"Parameter 'consider_case': {msg}")
+
   if consider_case:
-    oov_voc = select_subset_dictionary_casing(dictionary_instance, vocabulary)
+    oov_voc = select_subset_dictionary_casing(dictionary, vocabulary)
   else:
-    oov_voc = select_subset_dictionary_ignore_casing(dictionary_instance, vocabulary)
+    oov_voc = select_subset_dictionary_ignore_casing(dictionary, vocabulary)
   return oov_voc
 
 

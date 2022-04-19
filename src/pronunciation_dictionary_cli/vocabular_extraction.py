@@ -7,7 +7,7 @@ from ordered_set import OrderedSet
 
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict
-from pronunciation_dictionary.vocabular_extraction import get_vocab
+from pronunciation_dictionary.vocabular_extraction import get_vocabulary
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
                                                           add_deserialization_group,
                                                           add_encoding_argument, add_mp_group,
@@ -45,7 +45,7 @@ def get_vocabulary(ns: Namespace) -> bool:
       logger.error(f"Dictionary '{dictionary_path}' couldn't be read.")
       return False
 
-    vocabulary = get_vocab(dictionary_instance)
+    vocabulary = get_vocabulary(dictionary_instance)
     total_vocabulary.update(vocabulary)
 
   sort = not ns.unsorted

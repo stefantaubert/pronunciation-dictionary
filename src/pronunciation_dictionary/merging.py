@@ -1,17 +1,35 @@
+from typing import Optional
+
 from ordered_set import OrderedSet
 
 from pronunciation_dictionary import PronunciationDict
 from pronunciation_dictionary.common import merge_pronunciations
+from pronunciation_dictionary.validation import validate_dictionary, validate_ratio
 
 
-def merge_dictionary_files(resulting_dictionary: PronunciationDict, dictionary_instance: PronunciationDict, duplicate_handling: str, ratio: float) -> bool:
-  if duplicate_handling == "add":
-    dictionary_add_new(resulting_dictionary, dictionary_instance)
-  elif duplicate_handling == "replace":
-    dictionary_replace(resulting_dictionary, dictionary_instance)
-  elif duplicate_handling == "extend":
+def __validate_mode(mode: str) -> Optional[str]:
+  if mode not in ["add", "replace", "extend"]:
+    return "Invalid value!"
+  return None
+
+
+def merge_dictionaries(dictionary: PronunciationDict, other_dictionary: PronunciationDict, mode: str, ratio: float) -> bool:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := validate_dictionary(other_dictionary):
+    raise ValueError(f"Parameter 'other_dictionary': {msg}")
+  if msg := __validate_mode(mode):
+    raise ValueError(f"Parameter 'mode': {msg}")
+  if msg := validate_ratio(ratio):
+    raise ValueError(f"Parameter 'ratio': {msg}")
+
+  if mode == "add":
+    dictionary_add_new(dictionary, other_dictionary)
+  elif mode == "replace":
+    dictionary_replace(dictionary, other_dictionary)
+  elif mode == "extend":
     assert ratio is not None
-    dictionary_extend(resulting_dictionary, dictionary_instance, ratio)
+    dictionary_extend(dictionary, other_dictionary, ratio)
   else:
     assert False
 

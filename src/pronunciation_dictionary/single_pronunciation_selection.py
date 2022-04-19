@@ -1,4 +1,3 @@
-import random
 from collections import OrderedDict
 from functools import partial
 from multiprocessing.pool import Pool
@@ -8,18 +7,55 @@ from ordered_set import OrderedSet
 from tqdm import tqdm
 
 from pronunciation_dictionary.deserialization import MultiprocessingOptions
+from pronunciation_dictionary.pronunciation_selection import (get_first_pronunciation,
+                                                              get_last_pronunciation,
+                                                              get_pronunciation_with_highest_weight,
+                                                              get_pronunciation_with_lowest_weight,
+                                                              get_random_pronunciation,
+                                                              get_weighted_pronunciation)
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Word
+from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
+                                                 validate_seed)
 
 process_lookup_dict: PronunciationDict = None
 
+SelectionMode = Literal[
+  "first",
+  "last",
+  "highest-weight",
+  "lowest-weight",
+  "random",
+  "weighted",
+]
 
-def remove_extra_pronunciations(dictionary: PronunciationDict, mode: str, seed: Optional[int], mp_options: MultiprocessingOptions) -> Tuple[int]:
-  if seed is not None:
-    random.seed(seed)
+
+def __validate_mode(mode: str) -> Optional[str]:
+  if mode not in [
+    "first",
+    "last",
+    "highest-weight",
+    "lowest-weight",
+    "random",
+    "weighted",
+  ]:
+    return "Invalid value!"
+  return None
+
+
+def select_single_pronunciation(dictionary: PronunciationDict, mode: SelectionMode, seed: Optional[int], mp_options: MultiprocessingOptions) -> int:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := __validate_mode(mode):
+    raise ValueError(f"Parameter 'mode': {msg}")
+  if seed is not None and (msg := validate_seed(seed)):
+    raise ValueError(f"Parameter 'seed': {msg}")
+  if msg := validate_mp_options(mode):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
 
   process_method = partial(
     process_merge,
     mode=mode,
+    seed=seed,
   )
 
   with Pool(
@@ -48,7 +84,7 @@ def __init_pool_prepare_cache_mp(lookup_dict: PronunciationDict) -> None:
   process_lookup_dict = lookup_dict
 
 
-def process_merge(word: Word, mode: Literal["first", "last", "highest-weight", "lowest-weight", "random"]) -> Tuple[Word, Optional[Pronunciations]]:
+def process_merge(word: Word, mode: SelectionMode, seed: Optional[int]) -> Tuple[Word, Optional[Pronunciations]]:
   global process_lookup_dict
   assert word in process_lookup_dict
   pronunciations = process_lookup_dict[word]
@@ -57,15 +93,17 @@ def process_merge(word: Word, mode: Literal["first", "last", "highest-weight", "
     return word, None
 
   if mode == "first":
-    pronunciation = next(iter(pronunciations.keys()))
+    pronunciation = get_first_pronunciation(pronunciations)
   elif mode == "last":
-    pronunciation = next(reversed(pronunciations.keys()))
+    pronunciation = get_last_pronunciation(pronunciations)
   elif mode == "highest-weight":
-    pronunciation, _ = next(sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=False))
+    pronunciation, _ = get_pronunciation_with_highest_weight(pronunciations)
   elif mode == "lowest-weight":
-    pronunciation, _ = next(sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=True))
+    pronunciation, _ = get_pronunciation_with_lowest_weight(pronunciations)
   elif mode == "random":
-    pronunciation = random.choice(pronunciations.keys())
+    pronunciation = get_random_pronunciation(pronunciations, seed)
+  elif mode == "weighted":
+    pronunciation = get_weighted_pronunciation(pronunciations, seed)
   else:
     assert False
 

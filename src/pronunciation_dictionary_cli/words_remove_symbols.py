@@ -5,7 +5,7 @@ from tempfile import gettempdir
 
 from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
 from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.pronunciations_remove_symbols import remove_symbols
+from pronunciation_dictionary.pronunciations_remove_symbols import remove_symbols_from_pronunciations
 from pronunciation_dictionary.serialization import SerializationOptions
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
                                                           add_mp_group, get_optional,
@@ -52,8 +52,8 @@ def remove_symbols_from_words(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  removed_words, changed_counter = remove_symbols(
-    dictionary_instance, symbols_str, ns.mode, ns.ratio, ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
+  removed_words, changed_counter = remove_symbols_from_pronunciations(
+    dictionary_instance, symbols_str, ns.mode, ns.ratio, mp_options)
 
   if changed_counter == 0:
     logger.info("Didn't changed anything.")

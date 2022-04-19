@@ -1,9 +1,8 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.serialization import SerializationOptions
+from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
+                                      SerializationOptions, try_load_dict, try_save_dict)
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
                                                           add_deserialization_group, add_mp_group,
                                                           add_serialization_group,
@@ -20,6 +19,7 @@ def get_formatting_parser(parser: ArgumentParser):
   add_mp_group(parser)
 
   return adjust_formatting
+
 
 def adjust_formatting(ns: Namespace):
   logger = getLogger(__name__)

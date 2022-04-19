@@ -1,7 +1,8 @@
 
 from collections import OrderedDict
-from typing import Optional
+from typing import Any, Optional
 
+from pronunciation_dictionary.common import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict
 
 
@@ -18,7 +19,11 @@ class InternalError(ValidationError):
     return "Internal error!"
 
 
-def _validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
+def validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
+  return validate_type(dictionary, OrderedDict)
+
+
+def _validate_dictionary_deep(dictionary: PronunciationDict) -> Optional[str]:
   if not (isinstance(dictionary, OrderedDict)):
     return "Type needs to be 'OrderedDict'!"
   if len(dictionary) > 0:
@@ -32,4 +37,32 @@ def _validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
           return "Keys need to be of type 'tuple'!"
         if not isinstance(v2, float):
           return "Values need to be of type 'float'!"
+  return None
+
+
+def validate_ratio(ratio: float) -> Optional[str]:
+  if not 0 < ratio < 1:
+    return "Value needs to be in interval (0, 1)!"
+  return None
+
+
+def validate_mp_options(mp_options: MultiprocessingOptions) -> Optional[str]:
+  if not (isinstance(mp_options.chunksize, int) and mp_options.chunksize > 0):
+    return "Property 'chunksize' is invalid!"
+  if not (mp_options.maxtasksperchild is None or (isinstance(mp_options.maxtasksperchild, int) and mp_options.maxtasksperchild > 0)):
+    return "Property 'maxtasksperchild' is invalid!"
+  if not (isinstance(mp_options.n_jobs, int) and mp_options.n_jobs > 0):
+    return "Property 'n_jobs' is invalid!"
+  return None
+
+
+def validate_seed(seed: int) -> Optional[str]:
+  if not 0 < seed and not isinstance(seed, int):
+    return "Invalid value!"
+  return None
+
+
+def validate_type(obj: Any, t: type) -> Optional[str]:
+  if not isinstance(obj, t):
+    return f"Value needs of type '{t.__name__}'!"
   return None

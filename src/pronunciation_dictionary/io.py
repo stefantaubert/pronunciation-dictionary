@@ -1,41 +1,65 @@
-from logging import getLogger
 from pathlib import Path
-from typing import Optional
+from typing import List
+from urllib.request import urlopen
 
 from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      MultiprocessingOptions, parse_lines)
-from pronunciation_dictionary.serialization import SerializationOptions, to_text
+                                                      MultiprocessingOptions, deserialize,
+                                                      validate_deserialization_options)
+from pronunciation_dictionary.serialization import (SerializationOptions, serialize,
+                                                    validate_serialization_options)
 from pronunciation_dictionary.types import PronunciationDict
+from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
+                                                 validate_type)
 
 
-def save_dict(pronunciation_dict: PronunciationDict, path: Path, encoding: str, options: SerializationOptions):
-  dict_content = to_text(pronunciation_dict, options)
+def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options: SerializationOptions):
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := validate_type(path, Path):
+    raise ValueError(f"Parameter 'path': {msg}")
+  if msg := validate_type(encoding, str):
+    raise ValueError(f"Parameter 'encoding': {msg}")
+  if msg := validate_serialization_options(options):
+    raise ValueError(f"Parameter 'options': {msg}")
+
+  lines = serialize(dictionary, options)
+  dict_content = "\n".join(lines)
   path.parent.mkdir(parents=True, exist_ok=True)
   path.write_text(dict_content, encoding)
 
 
-def try_save_dict(pronunciation_dict: PronunciationDict, path: Path, encoding: str, options: SerializationOptions) -> bool:
-  try:
-    save_dict(pronunciation_dict, path, encoding, options)
-  except Exception as ex:
-    logger = getLogger(__name__)
-    logger.debug(ex)
-    return False
-  return True
-
-
 def load_dict(path: Path, encoding: str, options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
+  if msg := validate_type(path, Path):
+    raise ValueError(f"Parameter 'path': {msg}")
+  if msg := validate_type(encoding, str):
+    raise ValueError(f"Parameter 'encoding': {msg}")
+  if msg := validate_deserialization_options(options):
+    raise ValueError(f"Parameter 'options': {msg}")
+  if msg := validate_mp_options(mp_options):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
+
   text = path.read_text(encoding)
   lines = text.splitlines()
-  result = parse_lines(lines, options, mp_options)
+  result = deserialize(lines, options, mp_options)
   return result
 
 
-def try_load_dict(path: Path, encoding: str, options: DeserializationOptions, mp_options: MultiprocessingOptions) -> Optional[PronunciationDict]:
-  try:
-    result = load_dict(path, encoding, options, mp_options)
-  except Exception as ex:
-    logger = getLogger(__name__)
-    logger.debug(ex)
-    return None
+def load_dict_from_url(url: str, encoding: str, options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
+  if msg := validate_type(url, str):
+    raise ValueError(f"Parameter 'url': {msg}")
+  if msg := validate_type(encoding, str):
+    raise ValueError(f"Parameter 'encoding': {msg}")
+  if msg := validate_deserialization_options(options):
+    raise ValueError(f"Parameter 'options': {msg}")
+  if msg := validate_mp_options(mp_options):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
+
+  lines = read_lines_from_url(url, encoding)
+  result = deserialize(lines, options, mp_options)
+  return result
+
+
+def read_lines_from_url(url: str, encoding: str) -> List[str]:
+  with urlopen(url) as url_content:
+    result = [line.decode(encoding) for line in url_content]
   return result

@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from pronunciation_dictionary.common import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
+from pronunciation_dictionary.validation import validate_mp_options, validate_type
 
 WORD_PRON_PATTERN = re.compile(r"(\S+)\s+(.+)")
 WORD_WEIGHT_PRON_PATTERN = re.compile(r"(\S+)\s+([0-9\.]+)\s+(.+)")
@@ -29,23 +30,30 @@ class DeserializationOptions():
   consider_weights: bool
 
 
-def parse_lines(lines: List[str], options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
-  assert isinstance(lines, list)
-  assert isinstance(options.consider_comments, bool)
-  assert isinstance(options.consider_pronunciation_comments, bool)
-  assert isinstance(options.consider_weights, bool)
-  assert isinstance(options.consider_word_nrs, bool)
-  assert isinstance(mp_options.chunksize, int)
-  assert mp_options.chunksize > 0
-  assert mp_options.maxtasksperchild is None or (isinstance(mp_options.maxtasksperchild,
-                                                            int) and mp_options.maxtasksperchild > 0)
-  assert isinstance(mp_options.n_jobs, int)
-  assert mp_options.n_jobs > 0
+def validate_deserialization_options(options: DeserializationOptions) -> Optional[str]:
+  if msg := validate_type(options.consider_comments, bool):
+    return f"Property 'consider_comments': {msg}"
+  if msg := validate_type(options.consider_word_nrs, bool):
+    return f"Property 'consider_word_nrs': {msg}"
+  if msg := validate_type(options.consider_pronunciation_comments, bool):
+    return f"Property 'consider_pronunciation_comments': {msg}"
+  if msg := validate_type(options.consider_weights, bool):
+    return f"Property 'consider_weights': {msg}"
+  return None
 
-  logger = getLogger(__name__)
+
+def deserialize(lines: List[str], options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
+  if msg := validate_type(lines, list):
+    return f"Property 'lines': {msg}"
+  if msg := validate_deserialization_options(options):
+    raise ValueError(f"Parameter 'options': {msg}")
+  if msg := validate_mp_options(mp_options):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
 
   if len(lines) == 0:
     return OrderedDict()
+
+  logger = getLogger(__name__)
 
   process_method = partial(
     process_get_pronunciation,

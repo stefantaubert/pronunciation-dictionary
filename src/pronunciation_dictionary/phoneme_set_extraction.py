@@ -1,9 +1,13 @@
 from ordered_set import OrderedSet
 
 from pronunciation_dictionary.types import PronunciationDict, Symbol
+from pronunciation_dictionary.validation import validate_dictionary
 
 
 def get_phoneme_set(dictionary: PronunciationDict) -> OrderedSet[Symbol]:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+
   all_symbols = (
     symbol
     for pronunciations_weight_pair in dictionary.values()

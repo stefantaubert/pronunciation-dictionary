@@ -7,9 +7,37 @@ from tqdm import tqdm
 
 from pronunciation_dictionary.common import MultiprocessingOptions, merge_pronunciations
 from pronunciation_dictionary.types import PronunciationDict, Word
+from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
+                                                 validate_ratio)
 
 
-def remove_symbols(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+def __validate_mode(mode: str) -> Optional[str]:
+  if mode not in ["all", "start", "end", "both"]:
+    return "Value needs to be 'all', 'start', 'end' or 'both'!"
+  return None
+
+
+def __validate_symbols(symbols: str) -> Optional[str]:
+  if not isinstance(symbols, str):
+    return "Value needs of type 'str'!"
+  return None
+
+
+def remove_symbols_from_words(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+  if msg := validate_dictionary(dictionary):
+    raise ValueError(f"Parameter 'dictionary': {msg}")
+  if msg := __validate_symbols(symbols):
+    raise ValueError(f"Parameter 'symbols': {msg}")
+  if msg := __validate_mode(mode):
+    raise ValueError(f"Parameter 'mode': {msg}")
+  if msg := validate_ratio(ratio):
+    raise ValueError(f"Parameter 'ratio': {msg}")
+  if msg := validate_mp_options(mp_options):
+    raise ValueError(f"Parameter 'mp_options': {msg}")
+
+  if symbols == "":
+    return OrderedSet(), 0
+
   process_method = partial(
     process_get_word,
     symbols=symbols,

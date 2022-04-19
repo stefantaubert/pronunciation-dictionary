@@ -1,10 +1,21 @@
-from pronunciation_dictionary.api import (change_word_casing, get_dict_from_file,
-                                          get_dict_from_lines, get_dict_from_url,
-                                          get_first_pronunciation, get_weighted_pronunciation,
-                                          save_dict_to_file)
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.serialization import SerializationOptions
+from pronunciation_dictionary.deserialization import (DeserializationOptions,
+                                                      MultiprocessingOptions, deserialize)
+from pronunciation_dictionary.io import load_dict, load_dict_from_url, save_dict
+from pronunciation_dictionary.merging import merge_dictionaries
+from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set
+from pronunciation_dictionary.pronunciation_selection import (get_first_pronunciation,
+                                                              get_last_pronunciation,
+                                                              get_pronunciation_with_highest_weight,
+                                                              get_pronunciation_with_lowest_weight,
+                                                              get_random_pronunciation,
+                                                              get_weighted_pronunciation)
+from pronunciation_dictionary.pronunciations_remove_symbols import \
+  remove_symbols_from_pronunciations
+from pronunciation_dictionary.serialization import SerializationOptions, serialize
+from pronunciation_dictionary.single_pronunciation_selection import select_single_pronunciation
+from pronunciation_dictionary.subset_extraction import select_subset_dictionary
 from pronunciation_dictionary.types import (Pronunciation, PronunciationDict, Pronunciations,
                                             Symbol, Weight, Word)
-
-
+from pronunciation_dictionary.vocabular_extraction import get_vocabulary
+from pronunciation_dictionary.words_casing_adjustment import change_word_casing
+from pronunciation_dictionary.words_remove_symbols import remove_symbols_from_words
