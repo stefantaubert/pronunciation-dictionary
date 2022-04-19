@@ -14,7 +14,7 @@ from pronunciation_dictionary.validation import _validate_dictionary
 def __validate_mode(mode: str) -> Optional[str]:
   if mode not in ["lower", "upper"]:
     return "Invalid value!"
-
+  return None
 
 def change_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> int:
   if msg := __validate_mode(mode):
