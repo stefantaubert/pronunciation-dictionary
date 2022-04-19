@@ -6,7 +6,7 @@ from typing import Any, Optional, Set, Tuple, Type
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
-from pronunciation_dictionary.common import MultiprocessingOptions
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations, Symbol, Word
 from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
                                                  validate_type)

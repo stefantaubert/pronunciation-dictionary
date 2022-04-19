@@ -1,15 +1,23 @@
 from collections import OrderedDict
-from dataclasses import dataclass
-from typing import Optional
 
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations
+from pronunciation_dictionary.validation import validate_pronunciations, validate_ratio
 
 
 def merge_pronunciations(pronunciations1: Pronunciations, pronunciations2: Pronunciations, weights_ratio: float) -> None:
-  assert pronunciations1 != pronunciations2
-  assert 0 <= weights_ratio <= 1
+  if msg := validate_pronunciations(pronunciations1):
+    raise ValueError(f"Parameter 'pronunciations1': {msg}")
+  if msg := validate_pronunciations(pronunciations2):
+    raise ValueError(f"Parameter 'pronunciations2': {msg}")
+  if not pronunciations1 != pronunciations2:
+    raise ValueError(
+      f"Parameter 'pronunciations1' and 'pronunciations2': Pronunciations need to be distinct!")
+  if msg := validate_ratio(weights_ratio):
+    raise ValueError(f"Parameter 'weights_ratio': {msg}")
+
   convert_weights_to_probabilities(pronunciations1)
   convert_weights_to_probabilities(pronunciations2)
+
   if weights_ratio != 1:
     for pronunciation1, weight1 in pronunciations1.items():
       if pronunciation1 not in pronunciations2:
@@ -48,9 +56,3 @@ def convert_weights_to_probabilities(pronunciations: Pronunciations) -> None:
 #       pronunciations1[pronunciation2] += weight2
 #     else:
 #       pronunciations1[pronunciations2] = weight2
-
-@dataclass()
-class MultiprocessingOptions():
-  n_jobs: int
-  maxtasksperchild: Optional[int]
-  chunksize: int

@@ -2,8 +2,8 @@
 from collections import OrderedDict
 from typing import Any, Optional
 
-from pronunciation_dictionary.common import MultiprocessingOptions
-from pronunciation_dictionary.types import PronunciationDict
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
+from pronunciation_dictionary.types import PronunciationDict, Pronunciations
 
 
 class ValidationError():
@@ -41,8 +41,8 @@ def _validate_dictionary_deep(dictionary: PronunciationDict) -> Optional[str]:
 
 
 def validate_ratio(ratio: float) -> Optional[str]:
-  if not 0 < ratio < 1:
-    return "Value needs to be in interval (0, 1)!"
+  if not 0 <= ratio <= 1:
+    return "Value needs to be in interval [0, 1]!"
   return None
 
 
@@ -65,4 +65,12 @@ def validate_seed(seed: int) -> Optional[str]:
 def validate_type(obj: Any, t: type) -> Optional[str]:
   if not isinstance(obj, t):
     return f"Value needs of type '{t.__name__}'!"
+  return None
+
+
+def validate_pronunciations(pronunciations: Pronunciations) -> Optional[str]:
+  if msg := validate_type(pronunciations, OrderedDict):
+    return msg
+  if not len(pronunciations) > 0:
+    return "At least one pronunciation is required!"
   return None

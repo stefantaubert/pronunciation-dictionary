@@ -6,7 +6,7 @@ from ordered_set import OrderedSet
 from tqdm import tqdm
 
 from pronunciation_dictionary.common import merge_pronunciations
-from pronunciation_dictionary.deserialization import MultiprocessingOptions
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import PronunciationDict, Word
 from pronunciation_dictionary.validation import validate_dictionary, validate_ratio
 

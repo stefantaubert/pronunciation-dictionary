@@ -6,7 +6,7 @@ from typing import Literal, Optional, Tuple
 from ordered_set import OrderedSet
 from tqdm import tqdm
 
-from pronunciation_dictionary.deserialization import MultiprocessingOptions
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.pronunciation_selection import (get_first_pronunciation,
                                                               get_last_pronunciation,
                                                               get_pronunciation_with_highest_weight,

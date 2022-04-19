@@ -1,17 +1,8 @@
 import random
-from collections import OrderedDict
 from typing import Optional
 
 from pronunciation_dictionary.types import Pronunciation, Pronunciations
-from pronunciation_dictionary.validation import validate_seed, validate_type
-
-
-def validate_pronunciations(pronunciations: Pronunciations) -> Optional[str]:
-  if msg := validate_type(pronunciations, OrderedDict):
-    return msg
-  if not len(pronunciations) > 0:
-    return "At least one pronunciation is required!"
-  return None
+from pronunciation_dictionary.validation import validate_pronunciations, validate_seed
 
 
 def get_first_pronunciation(pronunciations: Pronunciations) -> Pronunciation:

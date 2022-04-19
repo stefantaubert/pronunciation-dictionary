@@ -4,8 +4,7 @@ from typing import OrderedDict as ODType
 
 from ordered_set import OrderedSet
 
-from pronunciation_dictionary import PronunciationDict
-from pronunciation_dictionary.types import Word
+from pronunciation_dictionary.types import PronunciationDict, Word
 from pronunciation_dictionary.validation import validate_dictionary
 
 

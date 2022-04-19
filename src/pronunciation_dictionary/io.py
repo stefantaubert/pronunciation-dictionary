@@ -3,8 +3,9 @@ from typing import List
 from urllib.request import urlopen
 
 from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      MultiprocessingOptions, deserialize,
+                                                      deserialize,
                                                       validate_deserialization_options)
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.serialization import (SerializationOptions, serialize,
                                                     validate_serialization_options)
 from pronunciation_dictionary.types import PronunciationDict

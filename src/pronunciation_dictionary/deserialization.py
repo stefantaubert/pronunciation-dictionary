@@ -8,7 +8,7 @@ from typing import List, Optional, Tuple
 
 from tqdm import tqdm
 
-from pronunciation_dictionary.common import MultiprocessingOptions
+from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 from pronunciation_dictionary.validation import validate_mp_options, validate_type
 
