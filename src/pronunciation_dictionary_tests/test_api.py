@@ -1,6 +1,6 @@
 import pytest
 
-from pronunciation_dictionary.api import validate_dictionary
+from pronunciation_dictionary import validate_dictionary
 
 
 def test_dict__raises_ValueError():

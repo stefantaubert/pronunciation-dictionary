@@ -1,13 +1,12 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.single_pronunciation_selection import select_single_pronunciation
+from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
+                                      SerializationOptions, select_single_pronunciation)
 from pronunciation_dictionary_cli.argparse_helper import (add_io_group, add_mp_group, get_optional,
                                                           parse_existing_file,
                                                           parse_non_negative_integer)
+from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
 
 
 def get_single_pronunciation_selection_parser(parser: ArgumentParser):

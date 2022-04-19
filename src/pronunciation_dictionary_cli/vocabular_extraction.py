@@ -5,13 +5,12 @@ from typing import cast
 
 from ordered_set import OrderedSet
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict
-from pronunciation_dictionary.vocabular_extraction import get_vocabulary
+from pronunciation_dictionary import DeserializationOptions, MultiprocessingOptions, get_vocabulary
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
                                                           add_deserialization_group,
                                                           add_encoding_argument, add_mp_group,
                                                           parse_existing_file, parse_path)
+from pronunciation_dictionary_cli.io import try_load_dict
 
 
 def get_vocabulary_extraction_parser(parser: ArgumentParser):
@@ -25,10 +24,10 @@ def get_vocabulary_extraction_parser(parser: ArgumentParser):
                       help="do not sort vocabulary in output")
   add_deserialization_group(parser)
   add_mp_group(parser)
-  return get_vocabulary
+  return get_vocabulary_ns
 
 
-def get_vocabulary(ns: Namespace) -> bool:
+def get_vocabulary_ns(ns: Namespace) -> bool:
   logger = getLogger(__name__)
   logger.debug(ns)
   assert len(ns.dictionaries) > 0

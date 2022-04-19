@@ -1,12 +1,11 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.serialization import SerializationOptions
-from pronunciation_dictionary.words_casing_adjustment import change_word_casing
+from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
+                                      SerializationOptions, change_word_casing)
 from pronunciation_dictionary_cli.argparse_helper import (add_io_group, add_mp_group,
                                                           parse_existing_file, parse_float_0_to_1)
+from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
 
 
 def get_words_casing_adjustment_parser(parser: ArgumentParser):

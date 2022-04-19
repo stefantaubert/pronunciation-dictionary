@@ -1,14 +1,13 @@
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict, try_save_dict
-from pronunciation_dictionary.merging import merge_dictionaries
-from pronunciation_dictionary.serialization import SerializationOptions
+from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
+                                      SerializationOptions, merge_dictionaries)
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
                                                           add_mp_group, get_optional,
                                                           parse_existing_file, parse_float_0_to_1,
                                                           parse_path)
+from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
 
 
 def get_merging_parser(parser: ArgumentParser):
@@ -56,7 +55,7 @@ def merge_dictionary_files_ns(ns: Namespace) -> bool:
       continue
 
     merge_dictionaries(resulting_dictionary, dictionary_instance,
-                           ns.duplicate_handling, ns.ratio)
+                       ns.duplicate_handling, ns.ratio)
 
   success = try_save_dict(resulting_dictionary, ns.output_dictionary, ns.encoding, s_options)
   if not success:

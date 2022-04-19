@@ -2,11 +2,12 @@ from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
 from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
-                                      SerializationOptions, try_load_dict, try_save_dict)
+                                      SerializationOptions)
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
                                                           add_deserialization_group, add_mp_group,
                                                           add_serialization_group,
                                                           parse_existing_file)
+from pronunciation_dictionary_cli.io import try_load_dict, try_save_dict
 
 
 def get_formatting_parser(parser: ArgumentParser):

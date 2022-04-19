@@ -6,12 +6,11 @@ from typing import cast
 
 from ordered_set import OrderedSet
 
-from pronunciation_dictionary.deserialization import DeserializationOptions, MultiprocessingOptions
-from pronunciation_dictionary.io import try_load_dict
-from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set
+from pronunciation_dictionary import DeserializationOptions, MultiprocessingOptions, get_phoneme_set
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
                                                           add_deserialization_group, add_mp_group,
                                                           parse_existing_file, parse_path)
+from pronunciation_dictionary_cli.io import try_load_dict
 
 
 def get_phoneme_set_extraction_parser(parser: ArgumentParser):
