@@ -1,8 +1,5 @@
-from collections import OrderedDict
-from dataclasses import dataclass
-from typing import List, Optional
 from typing import OrderedDict as OrderedDictType
-from typing import Protocol, Tuple, TypeVar
+from typing import Tuple
 
 Word = str
 Symbol = str
