@@ -20,7 +20,7 @@ PROG_CONS_WORD_NRS = False
 PROG_CONS_PRON_COMMENTS = False
 PROG_CONS_WEIGHTS = True
 
-DEFAULT_PUNCTUATION = list(OrderedSet(sorted((
+DEFAULT_PUNCTUATION = OrderedSet(sorted((
   "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "{", "}", "~", "`",
   "、", "。", "？", "！", "：", "；", "।", "¿", "¡", "【", "】", "，", "…", "‥", "「", "」", "『", "』", "〝", "〟", "″", "⟨", "⟩", "♪", "・", "‹", "›", "«", "»", "～", "′", "“", "”"
-))))
+)))
