@@ -63,5 +63,20 @@ pip install pronunciation-dictionary --user
 ## Usage
 
 ```sh
-pronunciation-dictionary-cli -h
+pronunciation-dictionary-cli
+```
+
+## Citation
+
+If you want to cite this repo, you can use this bibtex-entry:
+
+```bibtex
+@misc{tapr22,
+  author = {Taubert, Stefan},
+  title = {pronunciation-dictionary},
+  year = {2022},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/stefantaubert/pronunciation-dictionary}}
+}
 ```
