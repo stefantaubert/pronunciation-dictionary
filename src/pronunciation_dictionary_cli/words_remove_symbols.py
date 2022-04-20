@@ -4,7 +4,7 @@ from pathlib import Path
 from tempfile import gettempdir
 
 from pronunciation_dictionary import (DeserializationOptions, MultiprocessingOptions,
-                                      SerializationOptions, remove_symbols_from_pronunciations)
+                                      SerializationOptions, remove_symbols_from_words)
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction, add_io_group,
                                                           add_mp_group, get_optional,
                                                           parse_existing_file, parse_float_0_to_1,
@@ -31,10 +31,10 @@ def get_words_remove_symbols_parser(parser: ArgumentParser):
                       help="write removed words to this file", default=default_removed_out)
   add_io_group(parser)
   add_mp_group(parser)
-  return remove_symbols_from_words
+  return remove_symbols_from_words_ns
 
 
-def remove_symbols_from_words(ns: Namespace) -> bool:
+def remove_symbols_from_words_ns(ns: Namespace) -> bool:
   logger = getLogger(__name__)
   logger.debug(ns)
 
@@ -51,7 +51,7 @@ def remove_symbols_from_words(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  removed_words, changed_counter = remove_symbols_from_pronunciations(
+  removed_words, changed_counter = remove_symbols_from_words(
     dictionary_instance, symbols_str, ns.mode, ns.ratio, mp_options)
 
   if changed_counter == 0:
