@@ -97,9 +97,9 @@ def process_merge(word: Word, mode: SelectionMode, seed: Optional[int]) -> Tuple
   elif mode == "last":
     pronunciation = get_last_pronunciation(pronunciations)
   elif mode == "highest-weight":
-    pronunciation, _ = get_pronunciation_with_highest_weight(pronunciations)
+    pronunciation = get_pronunciation_with_highest_weight(pronunciations)
   elif mode == "lowest-weight":
-    pronunciation, _ = get_pronunciation_with_lowest_weight(pronunciations)
+    pronunciation = get_pronunciation_with_lowest_weight(pronunciations)
   elif mode == "random":
     pronunciation = get_random_pronunciation(pronunciations, seed)
   elif mode == "weighted":
@@ -108,7 +108,7 @@ def process_merge(word: Word, mode: SelectionMode, seed: Optional[int]) -> Tuple
     assert False
 
   sum_weights = sum(pronunciations.values())
-  result = OrderedDict(
+  result = OrderedDict((
     (pronunciation, sum_weights),
-  )
+  ))
   return word, result

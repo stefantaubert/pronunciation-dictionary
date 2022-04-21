@@ -22,14 +22,14 @@ def get_last_pronunciation(pronunciations: Pronunciations) -> Pronunciation:
 def get_pronunciation_with_highest_weight(pronunciations: Pronunciations) -> Pronunciation:
   if msg := validate_pronunciations(pronunciations):
     raise ValueError(f"Parameter 'pronunciations': {msg}")
-  pronunciation, _ = next(sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=False))
+  pronunciation, _ = sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=False)[0]
   return pronunciation
 
 
 def get_pronunciation_with_lowest_weight(pronunciations: Pronunciations) -> Pronunciation:
   if msg := validate_pronunciations(pronunciations):
     raise ValueError(f"Parameter 'pronunciations': {msg}")
-  pronunciation, _ = next(sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=True))
+  pronunciation, _ = sorted(pronunciations.items(), key=lambda kv: kv[1], reverse=True)[0]
   return pronunciation
 
 
