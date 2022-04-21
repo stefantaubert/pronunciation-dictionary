@@ -8,7 +8,8 @@ from ordered_set import OrderedSet
 
 from pronunciation_dictionary import DeserializationOptions, MultiprocessingOptions, get_phoneme_set
 from pronunciation_dictionary_cli.argparse_helper import (ConvertToOrderedSetAction,
-                                                          add_deserialization_group, add_mp_group,
+                                                          add_deserialization_group,
+                                                          add_encoding_argument, add_mp_group,
                                                           parse_existing_file, parse_path)
 from pronunciation_dictionary_cli.io import try_load_dict
 
@@ -20,8 +21,9 @@ def get_phoneme_set_extraction_parser(parser: ArgumentParser):
                       help="dictionary files", action=ConvertToOrderedSetAction)
   parser.add_argument("output", metavar="output", type=parse_path,
                       help="output phoneme set to this file", default=default_removed_out)
+  add_encoding_argument(parser, "-e", "--output-encoding", "encoding of the vocabulary file")
   parser.add_argument("-u", "--unsorted", action="store_true",
-                      help="do not sort vocabulary in output")
+                      help="do not sort phonemes in output")
   add_deserialization_group(parser)
   add_mp_group(parser)
   return get_phoneme_set_from_ns
@@ -38,7 +40,8 @@ def get_phoneme_set_from_ns(ns: Namespace) -> bool:
 
   total_vocabulary = OrderedSet()
   for dictionary_path in ns.dictionaries:
-    dictionary_instance = try_load_dict(dictionary_path, ns.encoding, lp_options, mp_options)
+    dictionary_instance = try_load_dict(
+      dictionary_path, ns.deserialization_encoding, lp_options, mp_options)
     if dictionary_instance is None:
       logger.error(f"Dictionary '{dictionary_path}' couldn't be read.")
       return False
@@ -54,7 +57,7 @@ def get_phoneme_set_from_ns(ns: Namespace) -> bool:
 
   try:
     ns.output.parent.mkdir(parents=True, exist_ok=True)
-    cast(Path, ns.output).write_text(content, ns.encoding)
+    cast(Path, ns.output).write_text(content, ns.output_encoding)
   except Exception as ex:
     logger.error("Phoneme set couldn't be saved!")
     return False
