@@ -32,12 +32,13 @@ def adjust_formatting(ns: Namespace):
   mp_options = MultiprocessingOptions(ns.n_jobs, ns.maxtasksperchild, ns.chunksize)
 
   for dictionary in ns.dictionaries:
-    dictionary_instance = try_load_dict(dictionary, ns.encoding, lp_options, mp_options)
+    dictionary_instance = try_load_dict(
+      dictionary, ns.deserialization_encoding, lp_options, mp_options)
     if dictionary_instance is None:
       logger.error(f"Dictionary '{dictionary}' couldn't be read.")
       return False
 
-    success = try_save_dict(dictionary_instance, dictionary, ns.encoding, s_options)
+    success = try_save_dict(dictionary_instance, dictionary, ns.serialization_encoding, s_options)
     if not success:
       logger.error("Dictionary couldn't be written.")
       return False
