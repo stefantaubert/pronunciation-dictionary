@@ -51,14 +51,14 @@ def remove_symbols_from_words_ns(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  removed_words, changed_counter = remove_symbols_from_words(
+  removed_words_entirely, removed_words = remove_symbols_from_words(
     dictionary_instance, symbols_str, ns.mode, ns.ratio, mp_options)
 
-  if changed_counter == 0:
+  if len(removed_words) == 0:
     logger.info("Didn't changed anything.")
     return True
 
-  logger.info(f"Changed pronunciations of {changed_counter} word(s).")
+  logger.info(f"Renamed {len(removed_words)} word(s).")
 
   success = try_save_dict(dictionary_instance, ns.dictionary, ns.encoding, s_options)
   if not success:
@@ -67,10 +67,10 @@ def remove_symbols_from_words_ns(ns: Namespace) -> bool:
 
   logger.info(f"Written dictionary to: {ns.dictionary.absolute()}")
 
-  if len(removed_words) > 0:
-    logger.warning(f"{len(removed_words)} words were removed.")
+  if len(removed_words_entirely) > 0:
+    logger.warning(f"{len(removed_words_entirely)} words were removed entirely.")
     if ns.removed_out is not None:
-      content = "\n".join(removed_words)
+      content = "\n".join(removed_words_entirely)
       ns.removed_out.parent.mkdir(parents=True, exist_ok=True)
       try:
         ns.removed_out.write_text(content, "UTF-8")

@@ -9,11 +9,11 @@ def merge_pronunciations(pronunciations1: Pronunciations, pronunciations2: Pronu
     raise ValueError(f"Parameter 'pronunciations1': {msg}")
   if msg := validate_pronunciations(pronunciations2):
     raise ValueError(f"Parameter 'pronunciations2': {msg}")
-  if not pronunciations1 != pronunciations2:
-    raise ValueError(
-      f"Parameter 'pronunciations1' and 'pronunciations2': Pronunciations need to be distinct!")
   if msg := validate_ratio(weights_ratio):
     raise ValueError(f"Parameter 'weights_ratio': {msg}")
+
+  if pronunciations1 == pronunciations2:
+    return None
 
   convert_weights_to_probabilities(pronunciations1)
   convert_weights_to_probabilities(pronunciations2)
@@ -33,6 +33,7 @@ def merge_pronunciations(pronunciations1: Pronunciations, pronunciations2: Pronu
     else:
       new_weight = new_weight2
     pronunciations1[pronunciation2] = new_weight
+  return None
 
 
 def convert_weights_to_probabilities_dict(dictionary: PronunciationDict) -> None:

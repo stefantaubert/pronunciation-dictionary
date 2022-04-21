@@ -24,7 +24,7 @@ def __validate_symbols(symbols: str) -> Optional[str]:
   return None
 
 
-def remove_symbols_from_words(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], int]:
+def remove_symbols_from_words(dictionary: PronunciationDict, symbols: str, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> Tuple[OrderedSet[Word], OrderedSet[Word]]:
   if msg := validate_dictionary(dictionary):
     raise ValueError(f"Parameter 'dictionary': {msg}")
   if msg := __validate_symbols(symbols):
@@ -53,7 +53,7 @@ def remove_symbols_from_words(dictionary: PronunciationDict, symbols: str, mode:
     iterator = pool.imap(process_method, entries, mp_options.chunksize)
     new_words_to_words = dict(tqdm(iterator, total=len(entries), unit="words"))
 
-  changed_counter = 0
+  removed_words_entirely = OrderedSet()
   removed_words = OrderedSet()
   all_words_in_order = OrderedSet(dictionary.keys())
   for word in all_words_in_order:
@@ -62,16 +62,16 @@ def remove_symbols_from_words(dictionary: PronunciationDict, symbols: str, mode:
     if changed_word:
       popped_pronunciations = dictionary.pop(word)
       if new_word in dictionary:
-        existing_pronunciations = dictionary[word]
+        existing_pronunciations = dictionary[new_word]
         merge_pronunciations(existing_pronunciations, popped_pronunciations, ratio)
       else:
         if new_word == "":
-          removed_words.add(word)
+          removed_words_entirely.add(word)
         else:
           dictionary[new_word] = popped_pronunciations
-      changed_counter += 1
+      removed_words.add(word)
 
-  return removed_words, changed_counter
+  return removed_words_entirely, removed_words
 
 
 def process_get_word(word: Word, symbols: str, mode: Literal["all", "start", "end", "both"]) -> Tuple[Word, Optional[Word]]:
