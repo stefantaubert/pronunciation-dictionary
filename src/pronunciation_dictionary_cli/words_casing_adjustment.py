@@ -36,14 +36,14 @@ def change_casing_ns(ns: Namespace) -> bool:
     logger.error(f"Dictionary '{ns.dictionary}' couldn't be read.")
     return False
 
-  changed_counter = change_word_casing(
+  removed_words, created_words = change_word_casing(
     dictionary_instance, ns.mode, ns.ratio, mp_options)
 
-  if changed_counter == 0:
+  if len(removed_words) == 0:
     logger.info("Didn't changed anything.")
     return True
 
-  logger.info(f"Changed pronunciations of {changed_counter} word(s).")
+  logger.info(f"Replaced {len(removed_words)} with {len(created_words)} word spelling(s).")
 
   success = try_save_dict(dictionary_instance, ns.dictionary, ns.encoding, s_options)
   if not success:

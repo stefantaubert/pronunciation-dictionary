@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from functools import partial
 from multiprocessing.pool import Pool
 from typing import Literal, Optional, Tuple
@@ -15,7 +16,6 @@ def __validate_mode(mode: str) -> Optional[str]:
   if mode not in ["lower", "upper"]:
     return "Invalid value!"
   return None
-
 
 
 def change_word_casing(dictionary: PronunciationDict, mode: str, ratio: float, mp_options: MultiprocessingOptions) -> int:
@@ -38,21 +38,27 @@ def change_word_casing(dictionary: PronunciationDict, mode: str, ratio: float, m
     iterator = pool.imap(process_method, dictionary.keys(), mp_options.chunksize)
     new_words_to_words = dict(tqdm(iterator, total=len(dictionary), unit="words"))
 
-  changed_counter = 0
-  all_words_in_order = OrderedSet(dictionary.keys())
-  for word in all_words_in_order:
-    new_word = new_words_to_words[word]
-    changed_word = new_word is not None
-    if changed_word:
-      popped_pronunciations = dictionary.pop(word)
-      if new_word in dictionary:
-        existing_pronunciations = dictionary[word]
-        merge_pronunciations(existing_pronunciations, popped_pronunciations, ratio)
-      else:
-        dictionary[new_word] = popped_pronunciations
-      changed_counter += 1
+  new_words = OrderedDict((
+    (k, new_word)
+    for k in dictionary.keys()
+    if (new_word := new_words_to_words[k])
+  ))
 
-  return changed_counter
+  del new_words_to_words
+
+  created_words = OrderedSet()
+
+  for word, new_word in new_words.items():
+    popped_pronunciations = dictionary.pop(word)
+    if new_word in dictionary:
+      existing_pronunciations = dictionary[new_word]
+      merge_pronunciations(existing_pronunciations, popped_pronunciations, ratio)
+    else:
+      created_words.add(new_word)
+      dictionary[new_word] = popped_pronunciations
+
+  removed_words = OrderedSet(new_words.keys())
+  return removed_words, created_words
 
 
 def __process_change_casing(word: Word, mode: Literal["upper", "lower"]) -> Tuple[Word, Optional[Word]]:

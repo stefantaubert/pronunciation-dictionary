@@ -49,7 +49,7 @@ def select_single_pronunciation(dictionary: PronunciationDict, mode: SelectionMo
     raise ValueError(f"Parameter 'mode': {msg}")
   if seed is not None and (msg := validate_seed(seed)):
     raise ValueError(f"Parameter 'seed': {msg}")
-  if msg := validate_mp_options(mode):
+  if msg := validate_mp_options(mp_options):
     raise ValueError(f"Parameter 'mp_options': {msg}")
 
   process_method = partial(
