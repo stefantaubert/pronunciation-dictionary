@@ -54,8 +54,9 @@ def remove_symbols_from_pronunciations(dictionary: PronunciationDict, symbols: O
     if len(new_pronunciations) == 0:
       if keep_empty:
         assert empty_symbol is not None
-        empty_pair = ((empty_symbol,), DEFAULT_EMPTY_WEIGHT)
-        dictionary[word] = OrderedDict(empty_pair,)
+        dictionary[word] = OrderedDict((
+          ((empty_symbol,), DEFAULT_EMPTY_WEIGHT),
+        ))
       else:
         removed_words.add(word)
         dictionary.pop(word)
