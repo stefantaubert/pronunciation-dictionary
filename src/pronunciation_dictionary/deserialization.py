@@ -6,8 +6,6 @@ from logging import getLogger
 from multiprocessing.pool import Pool
 from typing import List, Optional, Tuple
 
-from tqdm import tqdm
-
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 from pronunciation_dictionary.validation import validate_mp_options, validate_type
@@ -68,7 +66,8 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
   ) as pool:
     entries = range(len(lines))
     iterator = pool.imap(process_method, entries, mp_options.chunksize)
-    result = dict(tqdm(iterator, total=len(entries), unit="lines"))
+    # iterator = tqdm(iterator, total=len(entries), unit="lines")
+    result = dict(iterator)
 
   pronunciation_dict: PronunciationDict = OrderedDict()
   for line_i in range(len(lines)):

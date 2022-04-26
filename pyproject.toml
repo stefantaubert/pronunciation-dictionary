@@ -7,8 +7,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pronunciation-dictionary"
-version = "0.0.3"
-description = "Library to load/save/modify pronunciation dictionaries (any language)."
+version = "0.0.4"
+description = "Library to load and save pronunciation dictionaries (any language)."
 readme = "README.md"
 requires-python = ">=3.6"
 license = {text = "MIT"}
@@ -49,23 +49,16 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "License :: OSI Approved :: MIT License",
 ]
-dependencies = [
-  "tqdm",
-  "ordered-set >= 4.1.0"
-]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/stefantaubert/pronunciation-dictionary"
 Issues = "https://github.com/stefantaubert/pronunciation-dictionary/issues"
 
-[project.scripts]
-pronunciation-dictionary-cli = "pronunciation_dictionary_cli.cli:run"
-
 [tool.setuptools.packages.find]
 where = ["src"]
 include = [
   "pronunciation_dictionary",
-  "pronunciation_dictionary_cli"
 ]
 exclude = [
   "pronunciation_dictionary_tests",
@@ -90,6 +83,5 @@ line_length = 100
 indent = 2
 known_first_party = [
   "pronunciation_dictionary",
-  "pronunciation_dictionary_cli"
 ]
 known_third_party = ["ordered_set", "tqdm"]

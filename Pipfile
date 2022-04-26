@@ -16,8 +16,6 @@ twine = "*"
 cx-freeze = "*"
 
 [packages]
-ordered-set = ">=4.1.0"
-tqdm = "*"
 
 [requires]
 python_version = "3.8"

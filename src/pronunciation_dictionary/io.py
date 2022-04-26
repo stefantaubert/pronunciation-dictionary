@@ -2,8 +2,7 @@ from pathlib import Path
 from typing import List
 from urllib.request import urlopen
 
-from pronunciation_dictionary.deserialization import (DeserializationOptions,
-                                                      deserialize,
+from pronunciation_dictionary.deserialization import (DeserializationOptions, deserialize,
                                                       validate_deserialization_options)
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.serialization import (SerializationOptions, serialize,
@@ -55,12 +54,12 @@ def load_dict_from_url(url: str, encoding: str, options: DeserializationOptions,
   if msg := validate_mp_options(mp_options):
     raise ValueError(f"Parameter 'mp_options': {msg}")
 
-  lines = read_lines_from_url(url, encoding)
+  lines = __read_lines_from_url(url, encoding)
   result = deserialize(lines, options, mp_options)
   return result
 
 
-def read_lines_from_url(url: str, encoding: str) -> List[str]:
+def __read_lines_from_url(url: str, encoding: str) -> List[str]:
   with urlopen(url) as url_content:
     result = [line.decode(encoding) for line in url_content]
   return result

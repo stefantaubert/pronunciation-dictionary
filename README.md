@@ -4,24 +4,27 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/pronunciation-dictionary.svg)](https://pypi.python.org/pypi/pronunciation-dictionary)
 [![MIT](https://img.shields.io/github/license/stefantaubert/pronunciation-dictionary.svg)](LICENSE)
 
-Library and CLI to load/save/modify pronunciation dictionaries (any language).
+Library to load and save pronunciation dictionaries (any language).
 
 ## Features
 
-- Export vocabulary
-- Export phoneme set
-- Merge multiple pronunciation dictionaries
-- Extract subset of pronunciation dictionary
-- Remove characters from vocabulary
-- Remove phonemes from pronunciations
-- Change formatting
-- Select single pronunciation per word
+- Load dictionary from file or URL
+  - Parsing of
+    - line comments
+    - pronunciation comments
+    - numbers indicating alternative pronunciations for words
+    - weighted pronunciations
+  - Multiprocessing for faster deserialization
+- Save dictionary to file
+- Select pronunciation via
+  - weight
+  - highest/lowest weight
+  - first/last
+  - random
 
 ## Roadmap
 
 - Adding tests
-- Implementation of printing of statistics
-- Implementation of phoneme mapping, e.g., mapping ARPAbet to IPA
 
 ## Example dictionaries and deserialization arguments
 
@@ -71,7 +74,7 @@ pronunciation-dictionary-cli
 If you want to cite this repo, you can use this bibtex-entry:
 
 ```bibtex
-@misc{tapr22,
+@misc{tspd22,
   author = {Taubert, Stefan},
   title = {pronunciation-dictionary},
   year = {2022},
