@@ -13,9 +13,12 @@ Library to load and save pronunciation dictionaries (any language).
     - line comments
     - pronunciation comments
     - numbers indicating alternative pronunciations for words
-    - weighted pronunciations
+    - weights
   - Multiprocessing for faster deserialization
 - Save dictionary to file
+  - including numbers for alternative pronunciations
+  - include weights
+  - set word/weight/pronunciation separator
 - Select pronunciation via
   - weight
   - highest/lowest weight
