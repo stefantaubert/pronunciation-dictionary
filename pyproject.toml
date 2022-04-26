@@ -84,4 +84,4 @@ indent = 2
 known_first_party = [
   "pronunciation_dictionary",
 ]
-known_third_party = ["ordered_set", "tqdm"]
+known_third_party = []

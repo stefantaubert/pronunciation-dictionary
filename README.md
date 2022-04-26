@@ -21,6 +21,7 @@ Library to load and save pronunciation dictionaries (any language).
   - highest/lowest weight
   - first/last
   - random
+- Get phoneme set
 
 ## Roadmap
 
@@ -29,18 +30,18 @@ Library to load and save pronunciation dictionaries (any language).
 ## Example dictionaries and deserialization arguments
 
 - [Montreal Forced Aligner dictionaries](https://github.com/MontrealCorpusTools/mfa-models/tree/main/dictionary)
-  - `--deserialization-encoding "UTF-8"`
+  - `encoding: "UTF-8"`
 - [CMU](https://raw.githubusercontent.com/cmusphinx/cmudict/master/cmudict.dict)
-  - `--deserialization-encoding "ISO-8859-1"`
-  - `--consider-numbers`
-  - `--consider-pronunciation-comments`
+  - `encoding: "ISO-8859-1"`
+  - `consider_numbers: True`
+  - `consider_pronunciation_comments: True`
 - [LibriSpeech](https://www.openslr.org/resources/11/librispeech-lexicon.txt)
-  - `--deserialization-encoding "UTF-8"`
+  - `encoding: "UTF-8"`
 - [Prosodylab](https://raw.githubusercontent.com/prosodylab/Prosodylab-Aligner/master/eng.dict)
 - Old: [CMU 0.7b](http://svn.code.sf.net/p/cmusphinx/code/trunk/cmudict/cmudict-0.7b)
-  - `--deserialization-encoding "ISO-8859-1"`
-  - `--consider-comments`
-  - `--consider-numbers`
+  - `encoding: "ISO-8859-1"`
+  - `consider_comments: True`
+  - `consider_numbers: True`
 
 ### Excerpt from CMU (as example)
 
@@ -66,7 +67,7 @@ pip install pronunciation-dictionary --user
 ## Usage
 
 ```sh
-pronunciation-dictionary-cli
+from pronunciation_dictionary import load_dict, save_dict, MultiprocessingOptions, DeserializationOptions, SerializationOptions
 ```
 
 ## Citation

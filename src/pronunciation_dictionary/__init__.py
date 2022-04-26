@@ -11,4 +11,3 @@ from pronunciation_dictionary.pronunciation_selection import (get_first_pronunci
 from pronunciation_dictionary.serialization import SerializationOptions, serialize
 from pronunciation_dictionary.types import (Pronunciation, PronunciationDict, Pronunciations,
                                             Symbol, Weight, Word)
-from pronunciation_dictionary.vocabulary_extraction import get_vocabulary
