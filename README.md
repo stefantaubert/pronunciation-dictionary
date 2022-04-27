@@ -119,6 +119,11 @@ head /tmp/cmu.dict
 # 'n  AH0 N
 ```
 
+## Roadmap
+
+- replace `SerializationOptions`, `DeserializationOptions` and `MultiprocessingOptions` with parameters
+- add default parameter values
+
 ## Citation
 
 If you want to cite this repo, you can use this bibtex-entry:
