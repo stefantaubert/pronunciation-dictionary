@@ -126,7 +126,7 @@ head /tmp/cmu.dict
 
 ## Citation
 
-If you want to cite this repo, you can use this bibtex-entry:
+If you want to cite this repo, you can use this BibTeX-entry:
 
 ```bibtex
 @misc{tspd22,
