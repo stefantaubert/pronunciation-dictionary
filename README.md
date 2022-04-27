@@ -73,6 +73,52 @@ pip install pronunciation-dictionary --user
 from pronunciation_dictionary import load_dict, save_dict, MultiprocessingOptions, DeserializationOptions, SerializationOptions
 ```
 
+### Example
+
+```py
+from pathlib import Path
+
+from pronunciation_dictionary import (DeserializationOptions, 
+  MultiprocessingOptions, SerializationOptions, 
+  get_phoneme_set, load_dict_from_url, save_dict)
+
+dictionary = load_dict_from_url(
+  "https://raw.githubusercontent.com/cmusphinx/cmudict/master/cmudict.dict",
+  "ISO-8859-1",
+  DeserializationOptions(False, True, True, False),
+  MultiprocessingOptions(4, None, 10000)
+)
+
+phoneme_set = get_phoneme_set(dictionary)
+
+print(phoneme_set)
+# {'Z', 'EY1', 'AH0', 'F', 'AE0', 'UW0', 'CH', 'G', 'V', 'AY1', 'AO2', 'ZH', 'AA1', 'IY1', 'AW0', 'T', 'TH', 'AY2', 'DH', 'S', 'W', 'ER1', 'AA2', 'AE2', 'AE1', 'AW1', 'UW1', 'AH1', 'Y', 'EY2', 'AO0', 'OW2', 'OY2', 'IY2', 'JH', 'N', 'NG', 'P', 'IH2', 'M', 'OW0', 'L', 'UH1', 'IY0', 'EY0', 'HH', 'IH0', 'SH', 'AH2', 'AW2', 'EH2', 'OW1', 'D', 'R', 'IH1', 'AO1', 'B', 'UH2', 'UH0', 'ER0', 'UW2', 'ER2', 'EH0', 'AY0', 'AA0', 'EH1', 'OY1', 'OY0', 'K'}
+
+pronunciations_distmantle = dictionary.get("dismantle")
+
+for pronunciation, weight in pronunciations_distmantle.items():
+  print(pronunciation, weight)
+# ('D', 'IH0', 'S', 'M', 'AE1', 'N', 'T', 'AH0', 'L') 1.0
+# ('D', 'IH0', 'S', 'M', 'AE1', 'N', 'AH0', 'L') 1.0
+
+save_dict(dictionary, Path("/tmp/cmu.dict"), "UTF-8",
+          SerializationOptions("DOUBLE-SPACE", False, False))
+```
+
+```sh
+head /tmp/cmu.dict
+# 'bout  B AW1 T
+# 'cause  K AH0 Z
+# 'course  K AO1 R S
+# 'cuse  K Y UW1 Z
+# 'em  AH0 M
+# 'frisco  F R IH1 S K OW0
+# 'gain  G EH1 N
+# 'kay  K EY1
+# 'm  AH0 M
+# 'n  AH0 N
+```
+
 ## Citation
 
 If you want to cite this repo, you can use this bibtex-entry:
