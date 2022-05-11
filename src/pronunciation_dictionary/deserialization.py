@@ -68,7 +68,7 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
     iterator = pool.imap(process_method, entries, mp_options.chunksize)
     # iterator = tqdm(iterator, total=len(entries), unit="lines")
     result = dict(iterator)
-
+  
   pronunciation_dict: PronunciationDict = OrderedDict()
   for line_i in range(len(lines)):
     line_nr = line_i + 1
@@ -103,7 +103,9 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
         continue
       pronunciation_dict[word][pronunciation] = weight
     else:
-      pronunciation_dict[word] = OrderedDict(((pronunciation, weight),))
+      pronunciation_dict[word] = OrderedDict((
+        (pronunciation, weight),
+      ))
 
   return pronunciation_dict
 
