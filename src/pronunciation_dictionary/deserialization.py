@@ -2,10 +2,10 @@ import re
 from collections import OrderedDict
 from dataclasses import dataclass
 from functools import partial
-from logging import getLogger
 from multiprocessing.pool import Pool
 from typing import List, Optional, Tuple
 
+from pronunciation_dictionary.logging import getPronunciationDictionaryLogger
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 from pronunciation_dictionary.validation import validate_mp_options, validate_type
@@ -51,7 +51,7 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
   if len(lines) == 0:
     return OrderedDict()
 
-  logger = getLogger(__name__)
+  logger = getPronunciationDictionaryLogger()
 
   process_method = partial(
     process_get_pronunciation,
@@ -68,7 +68,7 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
     iterator = pool.imap(process_method, entries, mp_options.chunksize)
     # iterator = tqdm(iterator, total=len(entries), unit="lines")
     result = dict(iterator)
-  
+
   pronunciation_dict: PronunciationDict = OrderedDict()
   for line_i in range(len(lines)):
     line_nr = line_i + 1

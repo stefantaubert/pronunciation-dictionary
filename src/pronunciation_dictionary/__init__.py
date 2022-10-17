@@ -1,5 +1,6 @@
 from pronunciation_dictionary.deserialization import DeserializationOptions, deserialize
 from pronunciation_dictionary.io import load_dict, load_dict_from_url, save_dict
+from pronunciation_dictionary.logging import getPronunciationDictionaryLogger as getLogger
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.phoneme_set_extraction import get_phoneme_set
 from pronunciation_dictionary.pronunciation_selection import (get_first_pronunciation,
