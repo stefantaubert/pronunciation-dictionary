@@ -1,5 +1,3 @@
-import pytest
-
 from pronunciation_dictionary.validation import validate_dictionary
 
 
