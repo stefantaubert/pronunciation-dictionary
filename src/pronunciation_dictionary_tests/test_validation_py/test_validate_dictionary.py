@@ -1,4 +1,3 @@
-
 from pytest import raises
 
 from pronunciation_dictionary.types import PronunciationDict, Pronunciations

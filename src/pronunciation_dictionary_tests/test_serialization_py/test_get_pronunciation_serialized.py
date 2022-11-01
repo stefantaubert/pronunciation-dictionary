@@ -1,6 +1,3 @@
-
-
-
 from pronunciation_dictionary.serialization import _get_pronunciation_serialized
 
 
