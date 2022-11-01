@@ -1,6 +1,9 @@
 from dataclasses import dataclass
-from typing import Literal, Optional
+from logging import getLogger
+from multiprocessing.sharedctypes import Value
+from typing import Generator, Literal, Optional
 
+from pronunciation_dictionary.globals import LIB_NAME
 from pronunciation_dictionary.types import PronunciationDict
 from pronunciation_dictionary.validation import validate_dictionary
 
@@ -29,23 +32,29 @@ def validate_serialization_options(options: SerializationOptions) -> Optional[st
   return None
 
 
-def serialize(dictionary: PronunciationDict, options: SerializationOptions) -> str:
+def serialize(dictionary: PronunciationDict, options: SerializationOptions) -> Generator[str, None, None]:
   if msg := validate_dictionary(dictionary):
     raise ValueError(f"Parameter 'dictionary': {msg}")
   if msg := validate_serialization_options(options):
     raise ValueError(f"Parameter 'options': {msg}")
-
-  lines = []
   part_separator = part_separators[options.parts_sep]
   for word, pronunciations in dictionary.items():
+    if part_separator in word:
+      raise ValueError(
+        f"Parameter 'dictionary': Word \"{word}\" contains separator which is not allowed!")
     for counter, (pronunciation, weight) in enumerate(pronunciations.items(), start=1):
-      assert len(pronunciation) > 0
+      if len(pronunciation) == 0:
+        raise ValueError(
+          f"Parameter 'dictionary': At least one pronunciation to word \"{word}\" is empty!")
+      pron_part = " ".join(pronunciation)
+      part_separator_in_any_phoneme = any(part_separator in phoneme for phoneme in pronunciation)
+      if part_separator_in_any_phoneme:
+        raise ValueError(
+          f"Parameter 'dictionary': Pronunciation \"{pron_part}\" to word \"{word}\" contains separator which is not allowed!")
       counter_str = f"({counter})" if options.include_counter and counter > 1 else ""
       word_part = f"{word}{counter_str}{part_separator}"
       weights_part = ""
       if options.include_weights:
         weights_part = f"{weight}{part_separator}"
-      pron_part = " ".join(pronunciation)
       line = f"{word_part}{weights_part}{pron_part}"
-      lines.append(line)
-  return lines
+      yield line

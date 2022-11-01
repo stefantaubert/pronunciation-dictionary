@@ -22,8 +22,8 @@ def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options:
   if msg := validate_serialization_options(options):
     raise ValueError(f"Parameter 'options': {msg}")
 
-  lines = serialize(dictionary, options)
-  dict_content = "\n".join(lines)
+  lines_gen = serialize(dictionary, options)
+  dict_content = "\n".join(lines_gen)
   path.parent.mkdir(parents=True, exist_ok=True)
   path.write_text(dict_content, encoding)
 
