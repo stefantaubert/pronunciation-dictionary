@@ -1,8 +1,8 @@
 from collections import OrderedDict
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
-from pronunciation_dictionary.types import PronunciationDict, Pronunciations
+from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Pronunciations
 
 
 class ValidationError():
@@ -18,25 +18,65 @@ class InternalError(ValidationError):
     return "Internal error!"
 
 
-def validate_dictionary(dictionary: PronunciationDict) -> Optional[str]:
-  return validate_type(dictionary, OrderedDict)
+def _contain_whitespace(chars: str) -> bool:
+  for char in chars:
+    if char in (" ", "\t"):
+      return True
+  return False
 
 
-def _validate_dictionary_deep(dictionary: PronunciationDict) -> Optional[str]:
+def validate_dictionary(dictionary: PronunciationDict) -> None:
   if not (isinstance(dictionary, OrderedDict)):
-    return "Type needs to be 'OrderedDict'!"
-  if len(dictionary) > 0:
-    for k1, v1 in dictionary.items():
-      if not isinstance(k1, str):
-        return "Keys need to be of type 'str'!"
-      if not isinstance(v1, OrderedDict):
-        return "Values need to be of type 'OrderedDict'!"
-      for k2, v2 in v1.items():
-        if not isinstance(k2, tuple):
-          return "Keys need to be of type 'tuple'!"
-        if not isinstance(v2, float):
-          return "Values need to be of type 'float'!"
-  return None
+    raise ValueError("dictionary", "Type needs to be 'OrderedDict'!")
+  for word, pronunciations in dictionary.items():
+    try:
+      validate_word(word)
+    except ValueError as error:
+      raise ValueError("dictionary", error.args[1]) from error
+    if not isinstance(pronunciations, OrderedDict):
+      raise ValueError("dictionary", "Pronunciations need to be of type 'OrderedDict'!")
+    for pronunciation, weight in pronunciations.items():
+      try:
+        validate_pronunciation(pronunciation)
+      except ValueError as error:
+        raise ValueError("dictionary", error.args[1]) from error
+      try:
+        validate_weight(weight)
+      except ValueError as error:
+        raise ValueError("dictionary", error.args[1]) from error
+
+
+def validate_word(word: str) -> None:
+  if not isinstance(word, str):
+    raise ValueError("word", "Word need to be of type 'str'!")
+  if len(word) == 0:
+    raise ValueError("word", "Empty words is not allowed!")
+  if _contain_whitespace(word):
+    raise ValueError("word", "Word contains whitespace which is not allowed!")
+
+
+def validate_pronunciation(pronunciation: Pronunciation) -> None:
+  if not isinstance(pronunciation, tuple):
+    raise ValueError("pronunciation", "Pronunciation need to be of type 'tuple'!")
+
+  if len(pronunciation) == 0:
+    raise ValueError("pronunciation", "Pronunciation is empty!")
+
+  all_phonemes_are_str = all(isinstance(phoneme, str) for phoneme in pronunciation)
+  if not all_phonemes_are_str:
+    raise ValueError("pronunciation", "Phonemes need to be of type 'str'!")
+
+  whitespace_in_any_phoneme = any(
+    _contain_whitespace(phoneme)
+    for phoneme in pronunciation
+  )
+  if whitespace_in_any_phoneme:
+    raise ValueError("pronunciation", "Pronunciation contains whitespace which is not allowed!")
+
+
+def validate_weight(weight: Union[float, int]) -> None:
+  if not isinstance(weight, (float, int)):
+    raise ValueError("weight", "Weight needs to be of type 'float' or 'int'!")
 
 
 def validate_ratio(ratio: float) -> Optional[str]:

@@ -43,7 +43,7 @@ def validate_deserialization_options(options: DeserializationOptions) -> Optiona
 
 def deserialize(lines: List[str], options: DeserializationOptions, mp_options: MultiprocessingOptions) -> PronunciationDict:
   if msg := validate_type(lines, list):
-    return f"Property 'lines': {msg}"
+    raise ValueError(f"Property 'lines': {msg}")
   if msg := validate_deserialization_options(options):
     raise ValueError(f"Parameter 'options': {msg}")
   if msg := validate_mp_options(mp_options):

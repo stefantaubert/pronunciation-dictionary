@@ -5,8 +5,8 @@ from urllib.request import urlopen
 from pronunciation_dictionary.deserialization import (DeserializationOptions, deserialize,
                                                       validate_deserialization_options)
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
-from pronunciation_dictionary.serialization import (SerializationOptions, serialize,
-                                                    validate_serialization_options)
+from pronunciation_dictionary.serialization import (SerializationOptions,
+                                                    _validate_serialization_options, serialize)
 from pronunciation_dictionary.types import PronunciationDict
 from pronunciation_dictionary.validation import (validate_dictionary, validate_mp_options,
                                                  validate_type)
@@ -19,7 +19,7 @@ def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options:
     raise ValueError(f"Parameter 'path': {msg}")
   if msg := validate_type(encoding, str):
     raise ValueError(f"Parameter 'encoding': {msg}")
-  if msg := validate_serialization_options(options):
+  if msg := _validate_serialization_options(options):
     raise ValueError(f"Parameter 'options': {msg}")
 
   lines_gen = serialize(dictionary, options)
