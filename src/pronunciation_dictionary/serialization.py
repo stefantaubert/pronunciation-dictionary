@@ -38,7 +38,7 @@ def serialize(dictionary: PronunciationDict, options: SerializationOptions) -> G
     raise ValueError("dictionary", error.args[1]) from error
 
   if msg := _validate_serialization_options(options):
-    raise ValueError("options", f"{msg}")
+    raise ValueError("options", msg)
 
   part_separator = _part_separators[options.parts_sep]
   for word, pronunciations in dictionary.items():
