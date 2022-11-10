@@ -41,7 +41,7 @@ def get_random_pronunciation(pronunciations: Pronunciations, seed: Optional[int]
 
   if seed is not None:
     random.seed(seed)
-  pronunciation = random.choice(pronunciations.keys())
+  pronunciation = random.choice(tuple(pronunciations.keys()))
   return pronunciation
 
 
