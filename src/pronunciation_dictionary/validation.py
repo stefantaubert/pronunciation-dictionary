@@ -50,7 +50,7 @@ def validate_word(word: str) -> None:
   if not isinstance(word, str):
     raise ValueError("word", "Word need to be of type 'str'!")
   if len(word) == 0:
-    raise ValueError("word", "Empty words is not allowed!")
+    raise ValueError("word", "Empty words are not allowed!")
   if _contain_whitespace(word):
     raise ValueError("word", "Word contains whitespace which is not allowed!")
 

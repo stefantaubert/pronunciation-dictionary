@@ -13,8 +13,10 @@ from pronunciation_dictionary.validation import (validate_dictionary, validate_m
 
 
 def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options: SerializationOptions):
-  if msg := validate_dictionary(dictionary):
-    raise ValueError(f"Parameter 'dictionary': {msg}")
+  try:
+    validate_dictionary(dictionary)
+  except ValueError as error:
+    raise ValueError("dictionary", error.args[1]) from error
   if msg := validate_type(path, Path):
     raise ValueError(f"Parameter 'path': {msg}")
   if msg := validate_type(encoding, str):

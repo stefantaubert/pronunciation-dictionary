@@ -5,8 +5,10 @@ from pronunciation_dictionary.validation import validate_dictionary
 
 
 def get_phoneme_set(dictionary: PronunciationDict) -> Set[Symbol]:
-  if msg := validate_dictionary(dictionary):
-    raise ValueError(f"Parameter 'dictionary': {msg}")
+  try:
+    validate_dictionary(dictionary)
+  except ValueError as error:
+    raise ValueError("dictionary", error.args[1]) from error
 
   unique_symbols = {
     symbol
