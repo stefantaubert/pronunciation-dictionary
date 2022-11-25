@@ -13,12 +13,10 @@ readme = "README.md"
 requires-python = ">=3.6"
 license = {text = "MIT"}
 authors = [
-  {email = "stefan.taubert@posteo.me"},
-  {name = "Stefan Taubert"}
+  {name = "Stefan Taubert", email = "pypi@stefantaubert.com"}
 ]
 maintainers = [
-  {email = "stefan.taubert@posteo.me"},
-  {name = "Stefan Taubert"}
+  {name = "Stefan Taubert", email = "pypi@stefantaubert.com"},
 ]
 keywords = [
   "ARPAbet",
