@@ -13,7 +13,6 @@ rope = "*"
 pytest = "*"
 autoflake = "*"
 twine = "*"
-cx-freeze = "*"
 
 [packages]
 

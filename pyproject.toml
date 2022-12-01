@@ -1,16 +1,9 @@
-[build-system]
-requires = [
-  "setuptools >= 40.9.0",
-  "wheel",
-]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "pronunciation-dictionary"
 version = "0.0.4"
 description = "Library to load and save pronunciation dictionaries (any language)."
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
   {name = "Stefan Taubert", email = "pypi@stefantaubert.com"}
@@ -40,11 +33,10 @@ classifiers = [
   "Operating System :: Microsoft :: Windows",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.6",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "License :: OSI Approved :: MIT License",
 ]
 dependencies = []
@@ -83,3 +75,38 @@ known_first_party = [
   "pronunciation_dictionary",
 ]
 known_third_party = []
+
+[tool.pyright]
+root = ["src"]
+include = ["src"]
+pythonPlatform = "All"
+typeCheckingMode = "off"
+stubPath = ""
+exclude = [
+  "**/node_modules",
+  "**/__pycache__",
+  ".git",
+  "**/*.egg-info",
+  "**/*_debug",
+]
+useLibraryCodeForTypes = true
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py{38,39,310,311}
+isolated_build = True
+
+[testenv]
+deps = 
+  pytest
+commands = 
+  pytest
+"""
+
+[build-system]
+requires = [
+  "setuptools >= 40.9.0",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
