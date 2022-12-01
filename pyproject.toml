@@ -3,7 +3,7 @@ name = "pronunciation-dictionary"
 version = "0.0.5"
 description = "Library to load and save pronunciation dictionaries (any language)."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.8, <4"
 license = {text = "MIT"}
 authors = [
   {name = "Stefan Taubert", email = "pypi@stefantaubert.com"}
