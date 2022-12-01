@@ -5,7 +5,7 @@
 [![MIT](https://img.shields.io/github/license/stefantaubert/pronunciation-dictionary.svg)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/wheel/pronunciation-dictionary.svg)](https://pypi.python.org/pypi/pronunciation-dictionary/#files)
 ![PyPI](https://img.shields.io/pypi/implementation/pronunciation-dictionary.svg)
-[![PyPI](https://img.shields.io/github/commits-since/stefantaubert/pronunciation-dictionary/latest/master.svg)](https://github.com/stefantaubert/pronunciation-dictionary/compare/v0.0.5...main)
+[![PyPI](https://img.shields.io/github/commits-since/stefantaubert/pronunciation-dictionary/latest/master.svg)](https://github.com/stefantaubert/pronunciation-dictionary/compare/v0.0.5...master)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7386813.svg)](https://doi.org/10.5281/zenodo.7386813)
 
 Library to load and save pronunciation dictionaries (any language).
