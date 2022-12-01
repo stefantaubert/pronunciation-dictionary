@@ -33,6 +33,20 @@ def get_pronunciation_with_lowest_weight(pronunciations: Pronunciations) -> Pron
   return pronunciation
 
 
+def get_shortest_pronunciation(pronunciations: Pronunciations) -> Pronunciation:
+  if msg := validate_pronunciations(pronunciations):
+    raise ValueError(f"Parameter 'pronunciations': {msg}")
+  pronunciation = sorted(pronunciations.keys(), key=len, reverse=False)[0]
+  return pronunciation
+
+
+def get_longest_pronunciation(pronunciations: Pronunciations) -> Pronunciation:
+  if msg := validate_pronunciations(pronunciations):
+    raise ValueError(f"Parameter 'pronunciations': {msg}")
+  pronunciation = sorted(pronunciations.keys(), key=len, reverse=True)[0]
+  return pronunciation
+
+
 def get_random_pronunciation(pronunciations: Pronunciations, seed: Optional[int]) -> Pronunciation:
   if msg := validate_pronunciations(pronunciations):
     raise ValueError(f"Parameter 'pronunciations': {msg}")

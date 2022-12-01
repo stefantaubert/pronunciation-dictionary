@@ -13,7 +13,7 @@ def test_empty_word_raises_error():
 
   assert error.value.args == (
     "word",
-    "Empty words is not allowed!"
+    "Empty words are not allowed!"
   )
 
 
