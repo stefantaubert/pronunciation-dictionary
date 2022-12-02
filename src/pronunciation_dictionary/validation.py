@@ -79,12 +79,6 @@ def validate_weight(weight: Union[float, int]) -> None:
     raise ValueError("weight", "Weight needs to be of type 'float' or 'int'!")
 
 
-def validate_ratio(ratio: float) -> Optional[str]:
-  if not 0 <= ratio <= 1:
-    return "Value needs to be in interval [0, 1]!"
-  return None
-
-
 def validate_mp_options(mp_options: MultiprocessingOptions) -> Optional[str]:
   if not (isinstance(mp_options.chunksize, int) and mp_options.chunksize > 0):
     return "Property 'chunksize' is invalid!"

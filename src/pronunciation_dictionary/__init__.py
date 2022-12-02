@@ -13,3 +13,6 @@ from pronunciation_dictionary.pronunciation_selection import (get_first_pronunci
 from pronunciation_dictionary.serialization import SerializationOptions, serialize
 from pronunciation_dictionary.types import (Pronunciation, PronunciationDict, Pronunciations,
                                             Symbol, Weight, Word)
+from pronunciation_dictionary.validation import (validate_dictionary, validate_pronunciation,
+                                                 validate_pronunciations, validate_seed,
+                                                 validate_weight, validate_word)
