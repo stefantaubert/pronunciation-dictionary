@@ -6,7 +6,6 @@ from logging import getLogger
 from multiprocessing.pool import Pool
 from typing import List, Optional, Tuple
 
-from pronunciation_dictionary.globals import LIB_NAME
 from pronunciation_dictionary.mp_options import MultiprocessingOptions
 from pronunciation_dictionary.types import Pronunciation, PronunciationDict, Weight, Word
 from pronunciation_dictionary.validation import validate_mp_options, validate_type
@@ -52,7 +51,7 @@ def deserialize(lines: List[str], options: DeserializationOptions, mp_options: M
   if len(lines) == 0:
     return OrderedDict()
 
-  logger = getLogger(LIB_NAME)
+  logger = getLogger(__name__)
 
   process_method = partial(
     process_get_pronunciation,
