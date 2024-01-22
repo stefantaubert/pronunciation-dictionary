@@ -12,7 +12,7 @@ from pronunciation_dictionary.validation import (validate_dictionary, validate_m
                                                  validate_type)
 
 
-def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options: SerializationOptions):
+def save_dict(dictionary: PronunciationDict, path: Path, encoding: str, options: SerializationOptions) -> None:
   try:
     validate_dictionary(dictionary)
   except ValueError as error:
