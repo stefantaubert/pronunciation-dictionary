@@ -11,11 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added validation methods
+- Validation methods
+- Support for Python 3.12
 
 ### Changed
 
-- Change logging
+- Logging method
 
 ## [0.0.5] - 2022-12-01
 

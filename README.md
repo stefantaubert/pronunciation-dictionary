@@ -136,7 +136,8 @@ sudo apt install python3-pip \
   python3.8 python3.8-dev python3.8-distutils python3.8-venv \
   python3.9 python3.9-dev python3.9-distutils python3.9-venv \
   python3.10 python3.10-dev python3.10-distutils python3.10-venv \
-  python3.11 python3.11-dev python3.11-distutils python3.11-venv
+  python3.11 python3.11-dev python3.11-distutils python3.11-venv \
+  python3.12 python3.12-dev python3.12-distutils python3.12-venv
 # install pipenv for creation of virtual environments
 python3.8 -m pip install pipenv --user
 
@@ -166,6 +167,7 @@ Final lines of test result output:
   py39: commands succeeded
   py310: commands succeeded
   py311: commands succeeded
+  py312: commands succeeded
   congratulations :)
 ```
 
