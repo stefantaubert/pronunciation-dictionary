@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.6...HEAD
+[unreleased]: https://github.com/stefantaubert/pronunciation-dictionary/compare/v0.0.6...HEAD
 [0.0.6]: https://github.com/stefantaubert/pronunciation-dictionary/compare/compare/v0.0.6...v0.0.5
 [0.0.5]: https://github.com/stefantaubert/pronunciation-dictionary/compare/compare/v0.0.5...v0.0.4
 [0.0.4]: https://github.com/stefantaubert/pronunciation-dictionary/compare/compare/v0.0.4...v0.0.3
